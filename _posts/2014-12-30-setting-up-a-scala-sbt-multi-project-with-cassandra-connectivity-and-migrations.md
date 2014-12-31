@@ -38,6 +38,76 @@ start if you are using Mac OS X, and there is also
 [the official Getting Started page](http://wiki.apache.org/cassandra/GettingStarted).
 
 
-## Getting started
+## Setting things up
 
-Let's start by creating a directory for our project: `mkdir myproject`. Within it...
+Our first topic is to create the basic project structure, where we end up having three sub-projects that are all managed
+through one central `build.sbt` file.
+
+Let's start by creating a directory for our project: `mkdir myproject`. Within this directory, we need to create a
+`build.sbt` file. We need to fill it with the following content:
+
+    name := "My Project"
+
+    val commonSettings = Seq(
+      organization := "net.example",
+      version := "0.1",
+      scalaVersion := "2.11.4",
+      scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
+    )
+
+    lazy val common = project.in(file("common"))
+      .settings(commonSettings:_*)
+
+    lazy val sprayApp = project.in(file("sprayApp"))
+      .settings(commonSettings:_*)
+
+    lazy val playApp = project.in(file("playApp"))
+      .settings(commonSettings:_*)
+
+    lazy val main = project.in(file("."))
+      .aggregate(common, sprayApp, playApp)
+
+
+This is kind of a minimum required configuration, but it's already sufficient to give us an `sbt` project which consists
+of three sub-projects: **common**, **sprayApp**, and **playApp**. For each of these, we defined in which folder the code
+for the project resides, and which settings apply - in this case, we share a common set of settings.
+
+Note how we defined a fourth project: **main** is the container project which aggregates our three sub-projects. We will
+later see how this simplifies certain steps of the development workflow.
+
+Even with this basic setup, we can already explore how `sbt` behaves in a multi-project setup:
+
+    $ sbt
+    [info] Set current project to My Project (in build file:/Users/manuelkiessling/myproject/)
+
+    > project common
+    [info] Set current project to common (in build file:/Users/manuelkiessling/myproject/)
+
+    > test
+    [info] Updating {file:/Users/manuelkiessling/myproject/}common...
+    [info] Resolving jline#jline;2.12 ...
+    [info] Done updating.
+    [success] Total time: 2 s, completed 30.12.2014 19:31:31
+
+    > project main
+    [info] Set current project to My Project (in build file:/Users/manuelkiessling/myproject/)
+
+    > test
+    [info] Updating {file:/Users/manuelkiessling/myproject/}main...
+    [info] Updating {file:/Users/manuelkiessling/myproject/}playApp...
+    [info] Updating {file:/Users/manuelkiessling/myproject/}sprayApp...
+    [info] Resolving jline#jline;2.12 ...
+    [info] Done updating.
+    [info] Resolving jline#jline;2.12 ...
+    [info] Done updating.
+    [info] Resolving org.fusesource.jansi#jansi;1.4 ...
+    [info] Done updating.
+    [success] Total time: 1 s, completed 30.12.2014 19:40:29
+
+As you can see, the `sbt` console allows us to switch between sub-projects using the `project` command. We can change
+into one of the sub-projects, and when executing the `test` command, then it is run in the context of the chosen
+sub-project. When we do not switch into a sub-project (or switch back to the main project using `project main`), running
+`test` leads to the *test* command being executed in each of our sub-projects.
+
+Let's now add some actual code to our `common` sub-project. We will use this to place general-purpose code which is
+going to be used in all other projects.
