@@ -94,6 +94,7 @@ Even with this basic setup, we can already explore how `sbt` behaves in a multi-
 
     > test
     [info] Updating {file:/Users/manuelkiessling/myproject/}main...
+    [info] Updating {file:/Users/manuelkiessling/myproject/}common...
     [info] Updating {file:/Users/manuelkiessling/myproject/}playApp...
     [info] Updating {file:/Users/manuelkiessling/myproject/}sprayApp...
     [info] Resolving jline#jline;2.12 ...
@@ -109,5 +110,114 @@ into one of the sub-projects, and when executing the `test` command, then it is 
 sub-project. When we do not switch into a sub-project (or switch back to the main project using `project main`), running
 `test` leads to the *test* command being executed in each of our sub-projects.
 
-Let's now add some actual code to our `common` sub-project. We will use this to place general-purpose code which is
-going to be used in all other projects.
+Let's now add some actual code to our `common` sub-project. We will put general-purpose code, which is
+going to be used in all other projects, into `common`. The boilerplate code which allows to connect to Cassandra
+instances is a good example.
+
+To do so, we first need to create the required folder structures:
+
+    mkdir -p common/src/test/scala/common/utils/cassandra
+    mkdir -p common/src/main/scala/common/utils/cassandra
+
+First, we will create a case class that represents a Cassandra connection URI. Let's write a *scalatest* spec for it,
+which resides in file `common/src/test/scala/common/utils/cassandra/CassandraConnectionUriSpec.scala`:
+
+    package common.utils.cassandra
+    
+    import org.scalatest.{Matchers, FunSpec}
+    
+    class CassandraConnectionUriSpec extends FunSpec with Matchers {
+    
+      describe("A Cassandra connection URI object") {
+        it("should parse a URI with a single host") {
+          val cut = CassandraConnectionUri("cassandra://localhost:9042/control")
+          cut.host should be ("localhost")
+          cut.hosts should be (Seq("localhost"))
+          cut.port should be (9042)
+          cut.keyspace should be ("control")
+        }
+        it("should parse a URI with additional hosts") {
+          val cut = CassandraConnectionUri(
+            "cassandra://localhost:9042/control" +
+              "?host=otherhost.example.net" +
+              "&host=yet.anotherhost.example.com")
+          cut.hosts should contain allOf ("localhost", "otherhost.example.net", "yet.anotherhost.example.com")
+          cut.port should be (9042)
+          cut.keyspace should be ("control")
+        }
+      }
+    
+    }
+
+Creating this spec leads to `common` depending on the *scalatest* library. We need to declare this dependency in our
+`build.sbt` file. Because we are going to use *scalatest* in all our submodules, it makes sense to put the dependency
+declaration into a `val` which can be reused:
+
+    name := "My Project"
+    
+    val commonSettings = Seq(
+      organization := "net.example",
+      version := "0.1",
+      scalaVersion := "2.11.4",
+      scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
+    )
+
+    lazy val testDependencies = Seq (
+      "org.scalatest" %% "scalatest" % "2.2.0" % "test"
+    )
+    
+    lazy val common = project.in(file("common"))
+      .settings(commonSettings:_*)
+      .settings(libraryDependencies ++= testDependencies)
+    
+    lazy val sprayApp = project.in(file("sprayApp"))
+      .settings(commonSettings:_*)
+    
+    lazy val playApp = project.in(file("playApp"))
+      .settings(commonSettings:_*)
+    
+    lazy val main = project.in(file("."))
+      .aggregate(common, sprayApp, playApp)
+
+Now, starting `sbt`, switching to `project common`, and running `test` will of course still yield an error, because the
+spec is against a still missing implementation. Let's change that by putting the following into
+`common/src/test/scala/common/utils/cassandra/CassandraConnectionUri.scala`:
+
+    package common.utils.cassandra
+    
+    import java.net.URI
+    
+    case class CassandraConnectionUri(connectionString: String) {
+    
+      private val uri = new URI(connectionString)
+    
+      private val additionalHosts = Option(uri.getQuery) match {
+        case Some(query) => query.split('&').map(_.split('=')).filter(param => param(0) == "host").map(param => param(1)).toSeq
+        case None => Seq.empty
+      }
+    
+      val host = uri.getHost
+      val hosts = Seq(uri.getHost) ++ additionalHosts
+      val port = uri.getPort
+      val keyspace = uri.getPath.substring(1)
+    
+    }
+
+Running `test` in the sbt console will now result in a first successful test run:
+
+    $ sbt
+    [info] Set current project to My Project (in build file:/Users/manuelkiessling/myproject/)
+    > project common
+    [info] Set current project to common (in build file:/Users/manuelkiessling/myproject/)
+    > test
+    [info] Compiling 1 Scala source to /Users/manuelkiessling/myproject/common/target/scala-2.11/test-classes...
+    [info] CassandraConnectionUriSpec:
+    [info] A Cassandra connection URI object
+    [info] - should parse a URI with a single host
+    [info] - should parse a URI with additional hosts
+    [info] Run completed in 352 milliseconds.
+    [info] Total number of tests run: 2
+    [info] Suites: completed 1, aborted 0
+    [info] Tests: succeeded 2, failed 0, canceled 0, ignored 0, pending 0
+    [info] All tests passed.
+    [success] Total time: 6 s, completed 02.01.2015 11:36:45
