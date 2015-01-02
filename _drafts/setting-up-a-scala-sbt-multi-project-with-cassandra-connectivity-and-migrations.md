@@ -28,7 +28,7 @@ and Cassandra.
 
 ## Prerequisites
 
-The project setup we are going to create is based on Java 8, Scala 2.11, sbt 0.13 and Cassandra 2.0.11
+The project setup we are going to create is based on Java 8, Scala 2.11, sbt 0.13 and Cassandra 2.1.
 
 You'll need a working Scala environment (on Mac OS X with Homebrew, `brew install scala sbt`
 should do the job). You'll also need a running and reachable Cassandra installation - setting this up is out of the
@@ -132,20 +132,20 @@ which resides in file `common/src/test/scala/common/utils/cassandra/CassandraCon
     
       describe("A Cassandra connection URI object") {
         it("should parse a URI with a single host") {
-          val cut = CassandraConnectionUri("cassandra://localhost:9042/control")
+          val cut = CassandraConnectionUri("cassandra://localhost:9042/test")
           cut.host should be ("localhost")
           cut.hosts should be (Seq("localhost"))
           cut.port should be (9042)
-          cut.keyspace should be ("control")
+          cut.keyspace should be ("test")
         }
         it("should parse a URI with additional hosts") {
           val cut = CassandraConnectionUri(
-            "cassandra://localhost:9042/control" +
+            "cassandra://localhost:9042/test" +
               "?host=otherhost.example.net" +
               "&host=yet.anotherhost.example.com")
           cut.hosts should contain allOf ("localhost", "otherhost.example.net", "yet.anotherhost.example.com")
           cut.port should be (9042)
-          cut.keyspace should be ("control")
+          cut.keyspace should be ("test")
         }
       }
     
@@ -223,3 +223,76 @@ Running `test` in the sbt console will now result in a first successful test run
     [info] Tests: succeeded 2, failed 0, canceled 0, ignored 0, pending 0
     [info] All tests passed.
     [success] Total time: 6 s, completed 02.01.2015 11:36:45
+
+The next step is to add code that actually connects to Cassandra. This will lay the ground for adding automatic
+database migrations to the project. But first things first. Here is the code for an object which provides a method
+that returns a Cassandra database connection session; put it into
+`common/src/test/scala/common/utils/cassandra/Helper.scala`:
+
+    package common.utils.cassandra
+
+    import com.datastax.driver.core._
+
+    object Helper {
+
+      def createSessionAndInitKeyspace(uri: CassandraConnectionUri,
+                                       defaultConsistencyLevel: ConsistencyLevel = QueryOptions.DEFAULT_CONSISTENCY_LEVEL) = {
+        val cluster = new Cluster.Builder().
+          addContactPoints(uri.hosts.toArray: _*).
+          withPort(uri.port).
+          withQueryOptions(new QueryOptions().setConsistencyLevel(defaultConsistencyLevel)).build
+
+        val session = cluster.connect
+        session.execute(s"USE ${uri.keyspace}")
+        session
+      }
+
+    }
+
+This is a relatively straight-forward implementation which can be used like this:
+
+    import common.utils.cassandra._
+    
+    val uri = CassandraConnectionUri("cassandra://localhost:9042/test")
+    val session = Helper.createSessionAndInitKeyspace(uri)
+    
+    session.execute(/* Some CQL string */)
+
+Let's see how we can make use of this in a spec in order to prove that we can actually talk to our database. To do so,
+please create the file `common/src/test/scala/common/utils/cassandra/ConnectionAndQuerySpec.scala` and add the following
+code:
+
+    package common.utils.cassandra
+    
+    import com.datastax.driver.core.querybuilder.QueryBuilder
+    import com.datastax.driver.core.querybuilder.QueryBuilder._
+    import org.scalatest.{Matchers, FunSpec}
+    
+    class ConnectionAndQuerySpec extends FunSpec with Matchers {
+      
+      describe("Connecting and querying a Cassandra database") {
+        it("should just work") {
+          val uri = CassandraConnectionUri("cassandra://localhost:9042/test")
+          val session = Helper.createSessionAndInitKeyspace(uri)
+          
+          session.execute("CREATE TABLE IF NOT EXISTS things (id int, name text, PRIMARY KEY (id))")
+          session.execute("INSERT INTO things (id, name) VALUES (1, 'foo');")
+    
+          val selectStmt = select().column("name")
+            .from("things")
+            .where(QueryBuilder.eq("id", 1))
+            .limit(1)
+          
+          val resultSet = session.execute(selectStmt)
+          val row = resultSet.one()
+          row.getString("name") should be("foo")
+        }
+      }
+    
+    }
+
+Now, there is one thing that needs to be done which is actually outside of the scope of code, and that is creating the
+keyspace. Please do this manually using the `cqlsh`:
+
+    CREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };
+    
