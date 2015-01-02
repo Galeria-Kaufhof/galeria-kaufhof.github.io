@@ -291,8 +291,7 @@ code:
     
     }
 
-Now, there is one thing that needs to be done which is actually outside of the scope of code, and that is creating the
-keyspace. Please do this manually using the `cqlsh`:
+Now, there is one thing that needs to be done which is actually outside of the scope of our code, and that is creating
+the keyspace. Please do this manually using the `cqlsh`:
 
     CREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };
-    
