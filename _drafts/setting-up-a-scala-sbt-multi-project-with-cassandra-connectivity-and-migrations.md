@@ -110,6 +110,8 @@ into one of the sub-projects, and when executing the `test` command, then it is 
 sub-project. When we do not switch into a sub-project (or switch back to the main project using `project main`), running
 `test` leads to the *test* command being executed in each of our sub-projects.
 
+## Some first code
+
 Let's now add some actual code to our `common` sub-project. We will put general-purpose code, which is
 going to be used in all other projects, into `common`. The boilerplate code which allows to connect to Cassandra
 instances is a good example.
