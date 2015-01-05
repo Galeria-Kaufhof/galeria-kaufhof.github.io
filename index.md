@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Galeria Kaufhof Technologie Blog
+title: Galeria Kaufhof Technology Blog
 tagline:
 ---
 {% include JB/setup %}
