@@ -1,11 +1,19 @@
+{% assign author = site.authors[page.author] %}
+
 <div class="page-header">
   <h1>{{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}</h1>
 </div>
 
 <div class="row post-full">
   <div class="col-xs-12">
+    <div class="author-image">
+      <img src="http://www.gravatar.com/avatar/{{ author.gravatar }}?s=60">
+    </div>
+    <div class="author-name">
+      by {{ author.display_name }}
+    </div>
     <div class="date">
-      <span>{{ page.date | date_to_long_string }}</span>
+      <span>{{ page.date | date: "%B %-d, %Y" }}</span>
     </div>
     <div class="content">
       {{ content }}

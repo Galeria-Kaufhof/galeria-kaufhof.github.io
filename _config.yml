@@ -8,7 +8,7 @@ highlighter: pygments
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
 #
-title : Galeria Kaufhof Technologie Blog
+title : Galeria Kaufhof Technology Blog
 tagline:
 author :
   name : Galeria Kaufhof GmbH
@@ -16,6 +16,15 @@ author :
   github : Galeria-Kaufhof
   twitter : galeriakaufhof
   feedburner :
+
+authors:
+  manuelkiessling:
+    display_name: Manuel Kiessling
+    gravatar: 8b50d5d8199a12f00cfbfd1061e224a9
+    email: manuel.kiessling@kaufhof.de
+    web: http://manuel.kiessling.net
+    twitter: manuelkiessling
+    github: manuelkiessling
 
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 
@@ -82,7 +91,7 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : galeriakaufhoftechnologieblog
+      short_name : galeriakaufhoftechnologyblog
     livefyre :
       site_id : 123
     intensedebate :

@@ -21,7 +21,15 @@ h1, h2, h3, h4 {
   background-color: #fdcd60;
 }
 
+.post-full .author-image {
+  display: inline;
+  float: left;
+  margin-right: 12px;
+}
 
+.post-full .content {
+  margin-top: 64px;
+}
 
 /* posts index */
 .post > h3.title {

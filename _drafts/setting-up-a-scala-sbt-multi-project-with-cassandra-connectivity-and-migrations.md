@@ -3,6 +3,7 @@ layout: post
 title: "Setting up a Scala sbt multi project with Cassandra connectivity and migrations"
 description: ""
 category: tutorials
+author: manuelkiessling
 tags: [scala, sbt, cassandra, migrations, pillar, assembly]
 ---
 {% include JB/setup %}
