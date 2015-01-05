@@ -291,7 +291,145 @@ code:
     
     }
 
-Now, there is one thing that needs to be done which is actually outside of the scope of our code, and that is creating
-the keyspace. Please do this manually using the `cqlsh`:
+Now, there is one thing that needs to be done that is outside of the scope of our code, and that is the creation of the
+Cassandra keyspace. Please do this manually using the `cqlsh`:
 
-    CREATE KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };
+    CREATE KEYSPACE IF NOT EXISTS test WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': 1 };
+
+Running `test` once again from within `sbt` should yield a successful spec run.
+
+We are now at a point where we can add automatic database migrations for Cassandra. We will use an existing tool for
+this named [Pillar](https://github.com/comeara/pillar), and we'll add some wrapper and helper code in order to integrate
+it into our project.
+
+The first thing to do is to add the *Pillar* library as a dependency in our `build.sbt` file. This results in the
+*cassandraDependencies* block being changed from
+
+    lazy val cassandraDependencies = Seq (
+      "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.2"
+    )
+
+to
+
+    lazy val cassandraDependencies = Seq (
+      "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.2",
+      "com.chrisomeara" % "pillar_2.11" % "2.0.1"
+    )
+
+Next, we need some helper code. What we need is a method which allows to read the contents of a directory, no matter
+if this directory resides in the file system or within a JAR file. Greg Briggs has written a nice little class for this
+which we are going to use:
+
+    package common.utils.cassandra;
+    
+    import java.io.File;
+    import java.io.IOException;
+    import java.net.URISyntaxException;
+    import java.net.URL;
+    import java.net.URLDecoder;
+    import java.util.Enumeration;
+    import java.util.HashSet;
+    import java.util.Set;
+    import java.util.jar.JarEntry;
+    import java.util.jar.JarFile;
+    
+    public class JarUtils {
+    
+        /**
+         * List directory contents for a resource folder. Not recursive.
+         * This is basically a brute-force implementation.
+         * Works for regular files and also JARs.
+         *
+         * @param clazz Any java class that lives in the same place as the resources you want.
+         * @param path  Should end with "/", but not start with one.
+         * @return Just the name of each member item, not the full paths.
+         * @throws java.net.URISyntaxException
+         * @throws java.io.IOException
+         * @author Greg Briggs
+         */
+        public static String[] getResourceListing(Class clazz, String path) throws URISyntaxException, IOException {
+            URL dirURL = clazz.getClassLoader().getResource(path);
+            if (dirURL != null && dirURL.getProtocol().equals("file")) {
+            /* A file path: easy enough */
+                return new File(dirURL.toURI()).list();
+            }
+    
+            if (dirURL == null) {
+            /*
+             * In case of a jar file, we can't actually find a directory.
+             * Have to assume the same jar as clazz.
+             */
+                String me = clazz.getName().replace(".", "/") + ".class";
+                dirURL = clazz.getClassLoader().getResource(me);
+            }
+    
+            if (dirURL.getProtocol().equals("jar")) {
+            /* A JAR path */
+                String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!")); //strip out only the JAR file
+                JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+                Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+                Set<String> result = new HashSet<String>(); //avoid duplicates in case it is a subdirectory
+                while (entries.hasMoreElements()) {
+                    String name = entries.nextElement().getName();
+                    if (name.startsWith(path)) { //filter according to the path
+                        String entry = name.substring(path.length());
+                        int checkSubdir = entry.indexOf("/");
+                        if (checkSubdir >= 0) {
+                            // if it is a subdirectory, we just return the directory name
+                            entry = entry.substring(0, checkSubdir);
+                        }
+                        result.add(entry);
+                    }
+                }
+                return result.toArray(new String[result.size()]);
+            }
+    
+            throw new UnsupportedOperationException("Cannot list files for URL " + dirURL);
+        }
+    
+    }
+
+Note that this is Java code, not Scala. We therefore need to put it into
+`common/src/main/java/common/utils/cassandra/JarUtils.java`.
+
+Next up is some wrapper code that gives us an easy to handle *Pillar* object to work with from our own code. This one
+goes into `common/src/main/scala/common/utils/casssandra/Pillar.scala`:
+
+    package common.utils.cassandra
+    
+    import com.chrisomeara.pillar._
+    import com.datastax.driver.core.Session
+    
+    object Pillar {
+    
+      private val registry = Registry(loadMigrationsFromJarOrFilesystem())
+      private val migrator = Migrator(registry)
+    
+      private def loadMigrationsFromJarOrFilesystem() = {
+        val migrationsDir = "migrations/"
+        val migrationNames = JarUtils.getResourceListing(getClass, migrationsDir).toList.filter(_.nonEmpty)
+        val parser = Parser()
+    
+        migrationNames.map(name => getClass.getClassLoader.getResourceAsStream(migrationsDir + name)).map {
+          stream =>
+            try {
+              parser.parse(stream)
+            } finally {
+              stream.close()
+            }
+        }.toList
+      }
+    
+      def initialize(session: Session, keyspace: String, replicationFactor: Int): Unit = {
+        migrator.initialize(
+          session,
+          keyspace,
+          new ReplicationOptions(Map("class" -> "SimpleStrategy", "replication_factor" -> replicationFactor))
+        )
+      }
+    
+      def migrate(session: Session): Unit = {
+        migrator.migrate(session)
+      }
+    }
+
