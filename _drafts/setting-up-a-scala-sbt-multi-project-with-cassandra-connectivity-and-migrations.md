@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Setting up a Scala sbt multi project with Cassandra connectivity and migrations"
+title: "Setting up a Scala sbt multi project with Cassandra connectivity and migrations, Part 1"
 description: ""
 category: tutorials
 author: manuelkiessling
@@ -11,6 +11,7 @@ tags: [scala, sbt, cassandra, migrations, pillar, assembly]
 *I have learned the following through the great support and advice of my coworkers Jens Müller and
 [Martin Grotzke](https://twitter.com/martin_grotzke).*
 
+
 ## About
 
 I have recently joined the new multi-channel retail eCommerce project at Galeria Kaufhof in Cologne. This meant diving
@@ -19,11 +20,15 @@ unlearning, and disorientation, and some first small successes), as I'm still qu
 
 Thus, this is a from-the-trenches tutorial about some of the first things I have managed to understand and build. My
 goal is to provide a detailed step-by-step tutorial which shows how to set up a new Scala project with three sub-modules
-(one being plain old Scala, one being based on Play2, and one on Spray) using sbt. I'll also describe how to enable all
-three modules to speak with an Apache Cassandra database, and how to add automatically applied database migrations (in
-order to allow using the project in a Continuous Delivery setup like the one we use at Galeria Kaufhof).
+(one being plain old Scala, one being based on Play2, and one on Spray) using `sbt`. I'll also describe how to enable
+all three modules to speak with an Apache Cassandra database, and how to add automatically applied database migrations
+(in order to allow using the project in a Continuous Delivery setup like the one we use at Galeria Kaufhof).
 
-This tutorial is well suited for reasonably experienced software developers with some first basic experience with Scala
+Part 1 (which you are currently reading) covers the basic multi-project setup and describes how to get up and running
+with Cassandra migrations. Part 2 (which will be published in the near future) will discuss how to integrate a Play and
+a Spray application into the setup, respectively.
+
+This tutorial is well suited for reasonably experienced software developers with some first basic experience in Scala
 and Cassandra.
 
 
@@ -31,8 +36,8 @@ and Cassandra.
 
 The project setup we are going to create is based on Java 8, Scala 2.11, sbt 0.13 and Cassandra 2.1.
 
-You'll need a working Scala environment (on Mac OS X with Homebrew, `brew install scala sbt`
-should do the job). You'll also need a running and reachable Cassandra installation - setting this up is out of the
+You'll need a working Scala environment (on Mac OS X with Homebrew, `brew install scala sbt` should do the job). You'll
+also need a running and reachable Cassandra installation - setting this up is out of the
 scope of this text, but
 [this tutorial](http://christopher-batey.blogspot.de/2013/05/installing-cassandra-on-mac-os-x.html) might be a good
 start if you are using Mac OS X, and there is also
@@ -287,6 +292,7 @@ code:
           val resultSet = session.execute(selectStmt)
           val row = resultSet.one()
           row.getString("name") should be("foo")
+          session.execute("DROP TABLE things;")
         }
       }
     
@@ -299,7 +305,7 @@ Cassandra keyspace. Please do this manually using the `cqlsh`:
 
 Running `test` once again from within `sbt` should yield a successful spec run.
 
-We are now at a point where we can add automatic database migrations for Cassandra. We will use an existing tool for
+We are now at a point where we can add automatic database migrations for Cassandra. We will use an existing library for
 this named [Pillar](https://github.com/comeara/pillar), and we'll add some wrapper and helper code in order to integrate
 it into our project.
 
@@ -434,3 +440,86 @@ goes into `common/src/main/scala/common/utils/casssandra/Pillar.scala`:
       }
     }
 
+We can now approach running our very first migration. Let's create the file carrying the migration statements first. It
+goes into `/common/src/main/resources/migrations/1_create_things_table.cql`:
+
+    -- description: create status structure
+    -- authoredAt: 1418718253000
+    -- up:
+
+    CREATE TABLE things (
+      id int,
+      name text,
+      PRIMARY KEY (id)
+    );
+
+    -- down:
+
+    DROP TABLE things;
+
+Note that the `authoredAt` field is important. Migrations are applied in ascending order according to the value of this
+field. Its format is *milliseconds since start of the Unix epoch*.
+
+Now we need a place where migrations are actually applied. One solution is to do this right after connecting
+to the database, which might not be the most sensible solution in a production environment, but does the job for the
+scope of this tutorial.
+
+We achieve this by simply adding two lines to our *Helper* object in
+`common/src/main/scala/common/utils/casssandra/Helper.scala`:
+
+    package common.utils.cassandra
+
+    import com.datastax.driver.core._
+
+    object Helper {
+
+      def createSessionAndInitKeyspace(uri: CassandraConnectionUri,
+                                       defaultConsistencyLevel: ConsistencyLevel = QueryOptions.DEFAULT_CONSISTENCY_LEVEL) = {
+        val cluster = new Cluster.Builder().
+          addContactPoints(uri.hosts.toArray: _*).
+          withPort(uri.port).
+          withQueryOptions(new QueryOptions().setConsistencyLevel(defaultConsistencyLevel)).build
+
+        val session = cluster.connect
+        session.execute(s"USE ${uri.keyspace}")
+
+        Pillar.initialize(session, uri.keyspace, 1)
+        Pillar.migrate(session)
+
+        session
+      }
+
+    }
+
+We can now change our *ConnectionAndQuery* spec in file
+`common/src/test/scala/common/utils/cassandra/ConnectionAndQuerySpec.scala`, because we no longer need to create the
+table we test against within the spec itself - our migration will take care of this:
+
+    package common.utils.cassandra
+    
+    import com.datastax.driver.core.querybuilder.QueryBuilder
+    import com.datastax.driver.core.querybuilder.QueryBuilder._
+    import org.scalatest.{Matchers, FunSpec}
+    
+    class ConnectionAndQuerySpec extends FunSpec with Matchers {
+      
+      describe("Connecting and querying a Cassandra database") {
+        it("should just work") {
+          val uri = CassandraConnectionUri("cassandra://localhost:9042/test")
+          val session = Helper.createSessionAndInitKeyspace(uri)
+          
+          session.execute("INSERT INTO things (id, name) VALUES (1, 'foo');")
+    
+          val selectStmt = select().column("name")
+            .from("things")
+            .where(QueryBuilder.eq("id", 1))
+            .limit(1)
+          
+          val resultSet = session.execute(selectStmt)
+          val row = resultSet.one()
+          row.getString("name") should be("foo")
+          session.execute("TRUNCATE things;")
+        }
+      }
+    
+    }
