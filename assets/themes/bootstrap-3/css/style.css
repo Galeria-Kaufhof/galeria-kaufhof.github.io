@@ -91,6 +91,6 @@ h1, h2, h3, h4 {
   font-weight: bolder;
 }
 
-#jb-navbar-collapse, .navbar-header {
+#jb-navbar-collapse, .navbar-header, #footer {
   background-color: #A8D930;
 }
