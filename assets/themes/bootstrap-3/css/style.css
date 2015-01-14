@@ -90,3 +90,7 @@ h1, h2, h3, h4 {
   color: #006D3C;
   font-weight: bolder;
 }
+
+#jb-navbar-collapse, .navbar-header {
+  background-color: #A8D930;
+}
