@@ -112,7 +112,7 @@ Even with this basic setup, we can already explore how `sbt` behaves in a multi-
     [success] Total time: 1 s, completed 30.12.2014 19:40:29
 
 As you can see, the `sbt` console allows us to switch between sub-projects using the `project` command. We can change
-into one of the sub-projects, and when executing the `test` command, then it is run in the context of the chosen
+into one of the sub-projects, and when executing the `test` command, it is run in the context of the chosen
 sub-project. When we do not switch into a sub-project (or switch back to the main project using `project main`), running
 `test` leads to the *test* command being executed in each of our sub-projects.
 
