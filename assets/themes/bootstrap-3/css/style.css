@@ -15,7 +15,7 @@
 
 /* Jekyll Bootstrap Colors */
 h1, h2, h3, h4 {
-  color: #f22430;
+  color: #006D3C;
 }
 #footer {
   background-color: #fdcd60;
@@ -85,3 +85,8 @@ h1, h2, h3, h4 {
   background: #57A957;
   border: 1px solid #4c964d;
   color: #FFF; }
+
+.navbar a.navbar-brand {
+  color: #006D3C;
+  font-weight: bolder;
+}

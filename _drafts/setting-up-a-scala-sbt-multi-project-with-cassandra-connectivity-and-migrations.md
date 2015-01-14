@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Setting up a Scala sbt multi project with Cassandra connectivity and migrations, Part 1"
+title: "Setting up a Scala sbt multi project with Cassandra connectivity and migrations"
 description: ""
 category: tutorials
 author: manuelkiessling
@@ -14,19 +14,17 @@ tags: [scala, sbt, cassandra, migrations, pillar, assembly]
 
 ## About
 
-I have recently joined the new multi-channel retail eCommerce project at Galeria Kaufhof in Cologne. This meant diving
-head-first into a large-scale Scala/Play/Akka/Ruby software ecosystem, and as a consequence, a lot of learning (and
-unlearning, and disorientation, and some first small successes), as I'm still quite new to Scala.
+I have recently joined the new
+[multi-channel retail eCommerce project at Galeria Kaufhof in Cologne. This meant diving head-first into
+[a large-scale Scala/Play/Akka/Ruby software ecosystem](http://www.inoio.de/blog/2014/09/20/technologie-sprung-bei-galeria-kaufhof/),
+and as a consequence, a lot of learning (and unlearning, and disorientation, and some first small successes), as I'm
+still quite new to Scala.
 
 Thus, this is a from-the-trenches tutorial about some of the first things I have managed to understand and build. My
-goal is to provide a detailed step-by-step tutorial which shows how to set up a new Scala project with three sub-modules
-(one being plain old Scala, one being based on Play2, and one on Spray) using `sbt`. I'll also describe how to enable
-all three modules to speak with an Apache Cassandra database, and how to add automatically applied database migrations
+goal is to provide a detailed step-by-step tutorial which shows how to set up a new Scala project with two sub-modules
+(one being plain old Scala, one being based on Play2) using `sbt`. I'll also describe how to enable
+both modules to speak with an Apache Cassandra database, and how to add automatically applied database migrations
 (in order to allow using the project in a Continuous Delivery setup like the one we use at Galeria Kaufhof).
-
-Part 1 (which you are currently reading) covers the basic multi-project setup and describes how to get up and running
-with Cassandra migrations. Part 2 (which will be published in the near future) will discuss how to integrate a Play and
-a Spray application into the setup, respectively.
 
 This tutorial is well suited for reasonably experienced software developers with some first basic experience in Scala
 and Cassandra.
@@ -46,7 +44,7 @@ start if you are using Mac OS X, and there is also
 
 ## Setting things up
 
-Our first topic is to create the basic project structure, where we end up having three sub-projects that are all managed
+Our first topic is to create the basic project structure, where we end up having two sub-projects which are both managed
 through one central `build.sbt` file.
 
 Let's start by creating a directory for our project: `mkdir myproject`. Within this directory, we need to create a
@@ -64,22 +62,22 @@ Let's start by creating a directory for our project: `mkdir myproject`. Within t
     lazy val common = project.in(file("common"))
       .settings(commonSettings:_*)
 
-    lazy val sprayApp = project.in(file("sprayApp"))
-      .settings(commonSettings:_*)
-
     lazy val playApp = project.in(file("playApp"))
       .settings(commonSettings:_*)
 
     lazy val main = project.in(file("."))
-      .aggregate(common, sprayApp, playApp)
+      .aggregate(common, playApp)
 
 
 This is kind of a minimum required configuration, but it's already sufficient to give us an `sbt` project which consists
-of three sub-projects: **common**, **sprayApp**, and **playApp**. For each of these, we defined in which folder the code
-for the project resides, and which settings apply - in this case, we share a common set of settings.
+of two sub-projects: **common** and **playApp**. For each of these, we defined in which folder the code for the project
+resides, and which settings apply - in this case, we share a common set of settings.
 
-Note how we defined a fourth project: **main** is the container project which aggregates our three sub-projects. We will
-later see how this simplifies certain steps of the development workflow.
+Note how we really defined three projects: **main** is the container project which aggregates our two sub-projects.
+We will later see how this simplifies certain steps of the development workflow.
+
+
+## Using sbt with sub-projects
 
 Even with this basic setup, we can already explore how `sbt` behaves in a multi-project setup:
 
@@ -102,9 +100,6 @@ Even with this basic setup, we can already explore how `sbt` behaves in a multi-
     [info] Updating {file:/Users/manuelkiessling/myproject/}main...
     [info] Updating {file:/Users/manuelkiessling/myproject/}common...
     [info] Updating {file:/Users/manuelkiessling/myproject/}playApp...
-    [info] Updating {file:/Users/manuelkiessling/myproject/}sprayApp...
-    [info] Resolving jline#jline;2.12 ...
-    [info] Done updating.
     [info] Resolving jline#jline;2.12 ...
     [info] Done updating.
     [info] Resolving org.fusesource.jansi#jansi;1.4 ...
@@ -114,7 +109,8 @@ Even with this basic setup, we can already explore how `sbt` behaves in a multi-
 As you can see, the `sbt` console allows us to switch between sub-projects using the `project` command. We can change
 into one of the sub-projects, and when executing the `test` command, it is run in the context of the chosen
 sub-project. When we do not switch into a sub-project (or switch back to the main project using `project main`), running
-`test` leads to the *test* command being executed in each of our sub-projects.
+`test` leads to the *test* command being executed for each of our sub-projects.
+
 
 ## Some first code
 
@@ -178,14 +174,11 @@ declaration into a `val` which can be reused:
       .settings(commonSettings:_*)
       .settings(libraryDependencies ++= testDependencies)
     
-    lazy val sprayApp = project.in(file("sprayApp"))
-      .settings(commonSettings:_*)
-    
     lazy val playApp = project.in(file("playApp"))
       .settings(commonSettings:_*)
     
     lazy val main = project.in(file("."))
-      .aggregate(common, sprayApp, playApp)
+      .aggregate(common, playApp)
 
 Now, starting `sbt`, switching to `project common`, and running `test` will of course still yield an error, because the
 spec is against a still missing implementation. Let's change that by putting the following into
@@ -229,6 +222,9 @@ Running `test` in the sbt console will now result in a first successful test run
     [info] Tests: succeeded 2, failed 0, canceled 0, ignored 0, pending 0
     [info] All tests passed.
     [success] Total time: 6 s, completed 02.01.2015 11:36:45
+
+
+## Connecting to Cassandra
 
 The next step is to add code that actually connects to Cassandra. This will lay the ground for adding automatic
 database migrations to the project. But first things first. Here is the code for an object which provides a method
@@ -304,6 +300,9 @@ Cassandra keyspace. Please do this manually using the `cqlsh`:
     CREATE KEYSPACE IF NOT EXISTS test WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': 1 };
 
 Running `test` once again from within `sbt` should yield a successful spec run.
+
+
+## Integrating Pillar for database migrations
 
 We are now at a point where we can add automatic database migrations for Cassandra. We will use an existing library for
 this named [Pillar](https://github.com/comeara/pillar), and we'll add some wrapper and helper code in order to integrate
@@ -443,7 +442,7 @@ goes into `common/src/main/scala/common/utils/casssandra/Pillar.scala`:
 We can now approach running our very first migration. Let's create the file carrying the migration statements first. It
 goes into `/common/src/main/resources/migrations/1_create_things_table.cql`:
 
-    -- description: create status structure
+    -- description: create things table
     -- authoredAt: 1418718253000
     -- up:
 
@@ -523,3 +522,208 @@ table we test against within the spec itself - our migration will take care of t
       }
     
     }
+
+
+## Setting up the Play sub-project
+
+Now that we have all the boilerplate code we need for talking to Cassandra and applying migrations, let's actually set
+up a simple Play application in our *playApp* sub-project.
+
+The easiest way to do so is by using Typesafe's *activator* tool. On Mac OS X, a simple
+`brew install typesafe-activator` will get you started. Refer to
+[the Typesafe homepage](https://typesafe.com/get-started) for other options.
+
+Once installed, you can run the following at the root level of our *myproject* folder structure:
+
+    activator new playApp play-scala
+
+Note that you need to remove the folder `playApp` beforehand, in case it already exists.
+
+This will create an application skeleton of a Play application. However, it comes with its own `build.sbt`, and we need
+to transfer its settings to our central multi-project `build.sbt`. As a result, the `myproject/build.sbt` file needs to
+look like this:
+
+    name := "My Project"
+
+    val commonSettings = Seq(
+      organization := "net.example",
+      version := "0.1",
+      scalaVersion := "2.11.4",
+      scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
+    )
+
+    lazy val testDependencies = Seq (
+      "org.scalatest" %% "scalatest" % "2.2.0" % "test"
+    )
+
+    lazy val cassandraDependencies = Seq (
+      "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.2",
+      "com.chrisomeara" % "pillar_2.11" % "2.0.1"
+    )
+
+    lazy val playDependencies = Seq (
+      jdbc,
+      anorm,
+      cache,
+      ws
+    )
+
+    lazy val common = project.in(file("common"))
+      .settings(commonSettings:_*)
+      .settings(libraryDependencies ++= (testDependencies ++ cassandraDependencies))
+
+    lazy val playApp = project.in(file("playApp"))
+      .settings(commonSettings:_*)
+      .settings(libraryDependencies ++= (testDependencies ++ cassandraDependencies ++ playDependencies))
+      .enablePlugins(PlayScala)
+
+    lazy val main = project.in(file("."))
+      .aggregate(common, playApp)
+
+As you can see, we added a `playDependencies` val and make use of it in our `playApp` project configuration. We also
+enabled the `PlayScala` plugin on the project. In order to make this work, we need to elevate the sbt plugin
+configuration file (which has been created by the `activator` setup) from the `playApp` folder to the root folder of our
+project:
+
+    mv playApp/project/plugins.sbt ./project/
+
+With this, we can now remove the sbt stuff from the sub-project folder:
+
+rm playApp/build.sbt
+rm -rf playApp/project
+
+We should now be able to start a test run via `sbt` that runs the tests in both sub-projects, and we should be able to
+run the Play application in the *playApp* sub-project (I have removed some of the output for the sake of brevity):
+
+    $ sbt
+    [info] Loading project definition from /Users/manuelkiessling/myproject/project
+    [info] Set current project to My Project (in build file:/Users/manuelkiessling/myproject/)
+    > test
+    [info] CassandraConnectionUriSpec:
+    [info] A Cassandra connection URI object
+    [info] - should parse a URI with a single host
+    [info] - should parse a URI with additional hosts
+    [info] ConnectionAndQuerySpec:
+    [info] Connecting and querying a Cassandra database
+    [info] - should just work
+    [info] All tests passed.
+    [info] ApplicationSpec
+    [info]
+    [info] Application should
+    [info] + send 404 on a bad request
+    [info] + render the index page
+    [info]
+    [info] IntegrationSpec
+    [info]
+    [info] Application should
+    [info] + work from within a browser
+    [success] Total time: 10 s, completed 14.01.2015 19:10:23
+    > project playApp
+    [info] Set current project to playApp (in build file:/Users/manuelkiessling/myproject/)
+    [playApp] $ run
+
+    --- (Running the application, auto-reloading is enabled) ---
+
+    [info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+
+Great. Now let's finally make use of the fact that we do have a multi-project setup: Let's use code from the `common`
+module in our Play application. The most straight-forward way to do so is by using the Cassandra utility code during the
+startup of the Play app in order to connect to the Cassandra server - this way our Pillar migrations are applied when
+our application starts.
+
+Doing this is simple: all we need to do is add a `Global.scala` file to the `app` folder of the Play application
+folder (i.e.: `myproject/playApp/app/Global.scala`) where we override the `onStart` method of the `Global` object with
+code that connects to the database:
+
+    import common.utils.cassandra.{Helper, CassandraConnectionUri}
+    import play.api._
+
+    object Global extends GlobalSettings {
+
+      override def onStart(app: Application) {
+
+        val cassandraUri = CassandraConnectionUri("cassandra://localhost:9042/test")
+        Helper.createSessionAndInitKeyspace(cassandraUri)
+
+      }
+
+    }
+    
+This, however, won't compile, because the *playApp* module won't be able to find the classes in the *common* module all
+by itself - it needs a hint in our `build.sbt` file:
+
+    name := "My Project"
+
+    val commonSettings = Seq(
+      organization := "net.example",
+      version := "0.1",
+      scalaVersion := "2.11.4",
+      scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
+    )
+
+    lazy val testDependencies = Seq (
+      "org.scalatest" %% "scalatest" % "2.2.0" % "test"
+    )
+
+    lazy val cassandraDependencies = Seq (
+      "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.2",
+      "com.chrisomeara" % "pillar_2.11" % "2.0.1"
+    )
+
+    lazy val playDependencies = Seq (
+      jdbc,
+      anorm,
+      cache,
+      ws
+    )
+
+    lazy val common = project.in(file("common"))
+      .settings(commonSettings:_*)
+      .settings(libraryDependencies ++= (testDependencies ++ cassandraDependencies))
+
+    lazy val playApp = project.in(file("playApp"))
+      .settings(commonSettings:_*)
+      .settings(libraryDependencies ++= (testDependencies ++ cassandraDependencies ++ playDependencies))
+      .enablePlugins(PlayScala)
+      .dependsOn(common)
+
+    lazy val main = project.in(file("."))
+      .aggregate(common, playApp)
+
+Adding the `.dependsOn(common)` method call to the `playApp` val does the job.
+
+With this, we can add another migration, in file
+`myproject/common/src/main/resources/migrations/2_add_count_column_to_things_table.cql`...:
+
+    -- description: add count column to things table
+    -- authoredAt: 1421266233000
+    -- up:
+    
+    ALTER TABLE things ADD color text;
+    
+    -- down:
+    
+    ALTER TABLE things DROP color;
+
+...and have it applied by running the Play app...:
+
+    $ sbt
+    [info] Loading project definition from /Users/manuelkiessling/myproject/project
+    [info] Set current project to My Project (in build file:/Users/manuelkiessling/myproject/)
+    > project playApp
+    [info] Set current project to playApp (in build file:/Users/manuelkiessling/myproject/)
+    [playApp] $ run
+    
+    --- (Running the application, auto-reloading is enabled) ---
+    
+    [info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+    
+    (Server started, use Ctrl+D to stop and go back to the console...)
+
+...and requesting `http://localhost:9000/` (Play only actually runs the application when requests come in).
+
+And that's it, we now have an sbt multi-project setup with Cassandra connectivity and Pillar migrations. It's a very
+rudimentary and naïve implementation, but should be adequate to get you started.
+
+PS: In case you would like to work on a large-scale Scala and Cassandra project:
+[we are hiring](http://www.wir-lieben-ecommerce.de/).
