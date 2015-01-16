@@ -15,10 +15,12 @@
 
 /* Jekyll Bootstrap Colors */
 h1, h2, h3, h4 {
-  color: #006D3C;
+  color: #007551;
 }
 #footer {
-  background-color: #fdcd60;
+  background-color: #007551;
+  color: #fff;
+  color: #b8d45b;
 }
 
 .post-full .author-image {
@@ -82,15 +84,36 @@ h1, h2, h3, h4 {
   background-color: #e5e5e5; }
 
 .tag_box a.active {
-  background: #57A957;
-  border: 1px solid #4c964d;
+  background: #007551;
+  border: 1px solid #007551;
   color: #FFF; }
 
 .navbar a.navbar-brand {
-  color: #006D3C;
+  color: #fff;
   font-weight: bolder;
 }
 
 #jb-navbar-collapse, .navbar-header, #footer {
-  background-color: #A8D930;
+  background-color: #007551;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #b8d45b;
+}
+
+.navbar-brand, .navbar-nav > li > a {
+  text-shadow: none;
+}
+
+a {
+  color: #007551;
+  text-shadow: 0 1px 0 #b8d45b;
+}
+
+.tag_box {
+  opacity: 0.25;
+}
+
+code {
+  color: #555;
 }
