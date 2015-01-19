@@ -19,7 +19,10 @@ h1, h2, h3, h4 {
 }
 #footer {
   background-color: #007551;
-  color: #fff;
+  color: #b8d45b;
+}
+
+#footer p a {
   color: #b8d45b;
 }
 
@@ -107,7 +110,20 @@ h1, h2, h3, h4 {
 
 a {
   color: #007551;
-  text-shadow: 0 1px 0 #b8d45b;
+  /*text-shadow: 0 1px 0 #b8d45b;*/
+  border-bottom: 1px dotted #007551;
+}
+
+a:hover {
+  color: #b8d45b;
+  text-decoration: none;
+  border-bottom: 1px solid #007551;
+}
+
+a:visited {
+  color: #007551;
+  text-decoration: none;
+  border-bottom: 1px dotted #007551;
 }
 
 .tag_box {
