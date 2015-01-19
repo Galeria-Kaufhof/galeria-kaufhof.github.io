@@ -282,7 +282,7 @@ We need to add the Cassandra driver to our dependencies, making `build.sbt` look
     lazy val common = project.in(file("common"))
       .settings(commonSettings:_*)
       .settings(libraryDependencies ++= (testDependencies ++ cassandraDependencies))
-    
+
     lazy val playApp = project.in(file("playApp"))
       .settings(commonSettings:_*)
 
@@ -428,7 +428,7 @@ Note that this is Java code, not Scala. We therefore need to put it into
 `common/src/main/java/common/utils/cassandra/JarUtils.java`.
 
 Next up is some wrapper code that gives us an easy to handle *Pillar* object to work with from our own code. This one
-goes into `common/src/main/scala/common/utils/casssandra/Pillar.scala`:
+goes into `common/src/main/scala/common/utils/cassandra/Pillar.scala`:
 
     package common.utils.cassandra
     
@@ -493,7 +493,7 @@ to the database, which might not be the most sensible solution in a production e
 scope of this tutorial.
 
 We achieve this by simply adding two lines to our *Helper* object in
-`common/src/main/scala/common/utils/casssandra/Helper.scala`:
+`common/src/main/scala/common/utils/cassandra/Helper.scala`:
 
     package common.utils.cassandra
 
