@@ -182,7 +182,7 @@ declaration into a `val` which can be reused:
 
 Now, starting `sbt`, switching to `project common`, and running `test` will of course still yield an error, because the
 spec is against a still missing implementation. Let's change that by putting the following into
-`common/src/test/scala/common/utils/cassandra/CassandraConnectionUri.scala`:
+`common/src/main/scala/common/utils/cassandra/CassandraConnectionUri.scala`:
 
     package common.utils.cassandra
     
@@ -229,7 +229,7 @@ Running `test` in the sbt console will now result in a first successful test run
 The next step is to add code that actually connects to Cassandra. This will lay the ground for adding automatic
 database migrations to the project. But first things first. Here is the code for an object which provides a method
 that returns a Cassandra database connection session; put it into
-`common/src/test/scala/common/utils/cassandra/Helper.scala`:
+`common/src/main/scala/common/utils/cassandra/Helper.scala`:
 
     package common.utils.cassandra
 
@@ -469,7 +469,7 @@ goes into `common/src/main/scala/common/utils/cassandra/Pillar.scala`:
     }
 
 We can now approach running our very first migration. Let's create the file carrying the migration statements first. It
-goes into `/common/src/main/resources/migrations/1_create_things_table.cql`:
+goes into `common/src/main/resources/migrations/1_create_things_table.cql`:
 
     -- description: create things table
     -- authoredAt: 1418718253000
