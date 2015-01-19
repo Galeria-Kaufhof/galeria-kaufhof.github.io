@@ -4,7 +4,7 @@ title: "Jump - Ein Technologie-Sprung bei Galeria Kaufhof"
 description: ""
 category: general
 author: martingrotzke
-tags: [scala, sbt, cassandra, migrations, pillar, assembly]
+tags: [inoio, scala, cassandra, architecture]
 ---
 {% include JB/setup %}
 
