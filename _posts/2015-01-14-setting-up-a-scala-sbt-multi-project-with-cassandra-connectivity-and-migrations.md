@@ -260,6 +260,35 @@ This is a relatively straight-forward implementation which can be used like this
     
     session.execute(/* Some CQL string */)
 
+We need to add the Cassandra driver to our dependencies, making `build.sbt` look like this:
+
+    name := "My Project"
+
+    val commonSettings = Seq(
+      organization := "net.example",
+      version := "0.1",
+      scalaVersion := "2.11.4",
+      scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
+    )
+
+    lazy val testDependencies = Seq (
+      "org.scalatest" %% "scalatest" % "2.2.0" % "test"
+    )
+
+    lazy val cassandraDependencies = Seq (
+      "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.2"
+    )
+
+    lazy val common = project.in(file("common"))
+      .settings(commonSettings:_*)
+      .settings(libraryDependencies ++= (testDependencies ++ cassandraDependencies))
+    
+    lazy val playApp = project.in(file("playApp"))
+      .settings(commonSettings:_*)
+
+    lazy val main = project.in(file("."))
+      .aggregate(common, playApp)
+
 Let's see how we can make use of this in a spec in order to prove that we can actually talk to our database. To do so,
 please create the file `common/src/test/scala/common/utils/cassandra/ConnectionAndQuerySpec.scala` and add the following
 code:
