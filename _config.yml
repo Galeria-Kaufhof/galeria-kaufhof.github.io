@@ -26,6 +26,15 @@ authors:
     twitter: manuelkiessling
     github: manuelkiessling
 
+  martingrotzke:
+    display_name: Martin Grotzke
+    gravatar: 4e1908b60857ac6d68a27e82016b9843
+    email: martin.grotzke@inoio.de
+    web: http://www.inoio.de
+    twitter: martin_grotzke
+    github: magro
+
+
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 
 # Most places will/should use BASE_PATH to make the urls

@@ -15,7 +15,7 @@ tags: [scala, sbt, cassandra, migrations, pillar, assembly]
 ## About
 
 I have recently joined the new
-[multi-channel retail eCommerce project at Galeria Kaufhof in Cologne. This meant diving head-first into
+multi-channel retail eCommerce project at Galeria Kaufhof in Cologne. This meant diving head-first into
 [a large-scale Scala/Play/Akka/Ruby software ecosystem](http://www.inoio.de/blog/2014/09/20/technologie-sprung-bei-galeria-kaufhof/),
 and as a consequence, a lot of learning (and unlearning, and disorientation, and some first small successes), as I'm
 still quite new to Scala.
