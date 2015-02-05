@@ -79,7 +79,7 @@ issue right away:
 In addition Scala Logging comes with nice features such as the
 [LazyLogging](https://github.com/typesafehub/scala-logging#using-scala-logging) trait.
 
-## Verbosity - Oh Dear!
+## Verbosity...
 
 Logstash JSON Encoder is a little verbose (to say the least) and also we wanted
 to rename some file names to avoid overlap with fields added by other tools in
