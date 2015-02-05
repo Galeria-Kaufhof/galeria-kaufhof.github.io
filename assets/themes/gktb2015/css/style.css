@@ -1,0 +1,152 @@
+/* GKTB2015 theme */
+
+/*** BASICS ***/
+
+/* page */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-size: 18px;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+}
+
+/* links */
+a,
+a:visited {
+  text-decoration: none;
+  color: #006d48;
+}
+a:hover {
+  text-decoration: underline;
+  color: #004a37;
+}
+
+/* codeblocks */
+pre {
+  background: #eee;
+  padding: 10px;
+  font-size: 14px;
+  overflow: scroll;
+  /*word-wrap: break-word;*/
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+/*** LAYOUT ***/
+
+/* Wrapper for page content to push down footer */
+.gk-wrapper {
+  min-height: 70%;
+  height: auto;
+  margin: 0 auto -30px;
+  padding: 0 0 30px;
+}
+
+/* inner wrapper to force fixed width */
+.gk-wrapper-inner,
+.gk-footer-inner {
+  max-width: 960px;
+  margin: 0px auto;
+  padding: 0 1em;
+}
+
+/* minimal grid system */
+.gk-cols {
+  overflow: hidden;
+}
+.gk-col {
+  float: left;
+}
+.gk-cols-2 .gk-col {
+  width: 50%;
+}
+.gk-cols-3 .gk-col {
+  width: 33%;
+}
+
+/* alignment */
+.gk-align-right {
+  text-align: right;
+}
+
+
+/*** HEADER ***/
+
+.gk-header {
+  padding-top: 30px;
+}
+
+.gk-logo {
+  display: block;
+  width: 200px;
+  height: 50px;
+  background: url("../img/gk-logo.png");
+}
+
+.gk-navigation {
+  list-style: none;
+  text-align: right;
+}
+.gk-navigation li {
+  display: inline;
+}
+
+
+/*** CONTENT ***/
+
+.gk-content em {
+  display: block;
+  background: #eee;
+  color: #666;
+  padding: 10px;
+}
+
+.gk-content img {
+  max-width: 100%;
+}
+
+.gk-content p {
+  word-wrap: break-word;
+}
+
+
+/*** FOOTER ***/
+
+.gk-footer {
+  min-height: 250px;
+  background: #222;
+  color: #eee;
+  padding: 50px;
+  margin-top: 100px;
+}
+.gk-footer-inner {
+
+}
+.gk-footer-copy {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 0.7rem;
+}
+
+
+/*** LISTS ***/
+
+.gk-list-posts--post {
+  padding: 0 0 30px;
+}
+
+
+/*** POST ***/
+
+.gk-post {
+
+}
+
+
+/*** HOMEPAGE ***/
