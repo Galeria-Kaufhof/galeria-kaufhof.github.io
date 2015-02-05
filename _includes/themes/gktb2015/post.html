@@ -1,57 +1,61 @@
 {% assign author = site.authors[page.author] %}
 
 <div class="gk-post">
-  <div class="col-xs-12">
 
-    <div class="gk-post--title">
-      <h1>{{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}</h1>
-    </div>
-
-    <div class="gk-post--date">
+  <div class="gk-post--headline">
+    <div class="gk-post--subline">
       <span>{{ page.date | date: "%B %-d, %Y" }}</span>
     </div>
-
-    <div class="author-image">
-      <img src="http://www.gravatar.com/avatar/{{ author.gravatar }}?s=60">
+    <div class="gk-post--title">
+      __ {{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}
     </div>
-    <div class="author-name">
-      by {{ author.display_name }}
-    </div>
-    <div class="content">
-      {{ content }}
-    </div>
-
-  {% unless page.categories == empty %}
-    <ul class="tag_box inline">
-      <li><i class="glyphicon glyphicon-open"></i></li>
-      {% assign categories_list = page.categories %}
-      {% include JB/categories_list %}
-    </ul>
-  {% endunless %}
-
-  {% unless page.tags == empty %}
-    <ul class="tag_box inline">
-      <li><i class="glyphicon glyphicon-tags"></i></li>
-      {% assign tags_list = page.tags %}
-      {% include JB/tags_list %}
-    </ul>
-  {% endunless %}
-
-    <hr>
-    <ul class="pagination">
-    {% if page.previous %}
-      <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&laquo; Previous</a></li>
-    {% else %}
-      <li class="prev disabled"><a>&larr; Previous</a></li>
-    {% endif %}
-      <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>
-    {% if page.next %}
-      <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &raquo;</a></li>
-    {% else %}
-      <li class="next disabled"><a>Next &rarr;</a>
-    {% endif %}
-    </ul>
-    <hr>
-    {% include JB/comments %}
   </div>
+
+  <div class="gk-post--content">
+    {{ content }}
+  </div>
+
+  <div class="gk-post--author">
+    <span class="gk-post--author--image">
+      <img src="http://www.gravatar.com/avatar/{{ author.gravatar }}?s=60" />
+    </span>
+    <span class="gk-post--author--name">
+      by {% if author.twitter %}<a href="http://twitter.com/{{author.twitter}}" target="_blank">{%endif%}{{ author.display_name }}{% if author.twitter %}</a>{%endif%}
+    </span>
+  </div>
+
+{% unless page.categories == empty %}
+  <ul class="tag_box inline">
+    <li><i class="glyphicon glyphicon-open"></i></li>
+    {% assign categories_list = page.categories %}
+    {% include JB/categories_list %}
+  </ul>
+{% endunless %}
+
+{% unless page.tags == empty %}
+  <ul class="tag_box inline">
+    <li><i class="glyphicon glyphicon-tags"></i></li>
+    {% assign tags_list = page.tags %}
+    {% include JB/tags_list %}
+  </ul>
+{% endunless %}
+
+  <hr>
+  <ul class="pagination">
+  {% if page.previous %}
+    <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&laquo; Previous</a></li>
+  {% else %}
+    <li class="prev disabled"><a>&larr; Previous</a></li>
+  {% endif %}
+    <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>
+  {% if page.next %}
+    <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &raquo;</a></li>
+  {% else %}
+    <li class="next disabled"><a>Next &rarr;</a>
+  {% endif %}
+  </ul>
+
+  <hr /><br />
+  {% include JB/comments %}
+
 </div>

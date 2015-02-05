@@ -13,6 +13,7 @@
 
     <!-- Custom styles -->
     <link href="{{ ASSET_PATH }}/css/style.css?body=1" rel="stylesheet" type="text/css" media="all" />
+    <link href="{{ ASSET_PATH }}/css/gktb.css" rel="stylesheet" type="text/css" media="all" />
     <link href="{{ ASSET_PATH }}/css/highlight.css" rel="stylesheet" type="text/css" media="all" />
 
     <!-- Fav and touch icons -->
@@ -32,16 +33,17 @@
   <body>
     <div class="gk-wrapper">
 
-      <div class="gk-wrapper-inner">
-        <nav class="gk-cols gk-cols-2">
+      <div class="gk-wrapper--inner">
+
+        <nav class="gk-header gk-cols gk-cols-2">
           <div class="gk-col">
-            <a class="gk-logo" href="{{ HOME_PATH }}"><span>{{ site.title }}</span></a>
+            <a class="gk-header--logo" href="{{ HOME_PATH }}"><span>{{ site.title }}</span></a>
           </div>
           <div class="gk-col">
-            <ul class="gk-navigation">
-              <li><a href="#search"><span>search</span></a></li>
-              <li><a href="#github"><span>github</span></a></li>
-              <li><a href="#menu"><span>menu</span></a></li>
+            <ul class="gk-header--navigation">
+              <li><a href="#search" class="gk-icon gk-icon--search"><span>search</span></a></li>
+              <li><a href="#github" class="gk-icon gk-icon--github"><span>github</span></a></li>
+              <li><a href="#menu" class="gk-icon gk-icon--menu"><span>menu</span></a></li>
             </ul>
           </div>
         </nav>
@@ -49,13 +51,14 @@
         <div class="gk-content">
           {{ content }}
         </div>
+
       </div>
     </div>
 
     <div class="gk-footer">
-        <div class="gk-footer-inner gk-cols gk-cols-3">
+        <div class="gk-footer--inner gk-cols gk-cols-3">
           <div class="gk-col" id="menu">
-            <ul class="gk-footer-navigation">
+            <ul class="gk-footer--navigation">
               {% assign pages_list = site.pages %}
               {% assign group = 'navigation' %}
               {% include JB/pages_list %}
@@ -65,12 +68,15 @@
           <div class="gk-col" id="github">
             MIDDLE
           </div>
-          <div class="gk-col" id="search">
-            RIGHT
+          <div class="gk-col gk-align-right" id="search">
+            <div class="gk-searchbox">
+              <input type="text" class="gk-searchbox--input" placeholder="Search..." />
+              <button class="gk-searchbox--button"><span>Search</span></button>
+            </div>
           </div>
         </div>
 
-        <div class="gk-footer-inner gk-footer-copy">
+        <div class="gk-footer--inner gk-footer--copy">
           &copy; {{ site.time | date: '%Y' }} {{ site.author.name }} - <a href="http://www.galeria-kaufhof.de/service/impressum.html">Impressum</a>
         </div>
     </div>
