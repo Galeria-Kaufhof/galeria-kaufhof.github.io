@@ -17,8 +17,8 @@ therefore had to get Play to log in JSON. This note briefly describes our soluti
 
 ## Logback JSON Encoder
 
-The logstash team provides a [JSON formatter for logback logs](https://github.com/logstash/logstash-logback-encoder). You add
-can this to your sbt project as the following dependency in the build.sbt:
+The logstash team provides a [JSON formatter for logback logs](https://github.com/logstash/logstash-logback-encoder). You can
+add this to your sbt project as the following dependency in the build.sbt:
 
     libraryDependencies += "net.logstash.logback" % "logstash-logback-encoder" % "4.0"
 
