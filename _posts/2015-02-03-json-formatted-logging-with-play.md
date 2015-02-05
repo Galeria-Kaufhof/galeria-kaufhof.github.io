@@ -14,7 +14,7 @@ upcoming metrics and analysis use cases we picked JSON as the common log format.
 We are primarily using Scala and the Play! Framework for our application development therefore had
 to get Play! to log in JSON. This note briefly describes our solution.
 
-# Logback JSON Encoder
+## Logback JSON Encoder
 
 The logstash team provides a [JSON formatter for logback logs](https://github.com/logstash/logstash-logback-encoder). You add
 this to your sbt project as the following dependency in the build.sbt:
@@ -48,7 +48,7 @@ The facility Logback JSON Encoder uses to add user defined fields to the emitted
 
 See [Event-Specific Custom Fields](https://github.com/logstash/logstash-logback-encoder#loggingevent_custom_event)
 
-# Play! Logging with Markers - the Built-In Logger
+## Play! Logging with Markers - the Built-In Logger
 
 Given we are using Play! the straight forward way to get hold of a Logger instance is
 to import Play!'s play.api.Logger:
@@ -66,7 +66,7 @@ One solution is to augment LoggerLike with an implicit trait, but we found that 
 source location information in error log events. Not good.
 
 
-# Logging with Markers - without Play
+## Logging with Markers - without Play!
 
 An alternative to augmenting Play's logger is to use a logging library that properly implements
 the Marker-variants of the log methods.
@@ -79,7 +79,7 @@ issue right away:
 In addition Scala Logging comes with nice features such as the
 [LazyLogging](https://github.com/typesafehub/scala-logging#using-scala-logging) trait.
 
-# Verbosity - Oh Dear!
+## Verbosity - Oh Dear!
 
 Logstash JSON Encoder is a little verbose (to say the least) and also we wanted
 to rename some file names to avoid overlap with fields added by other tools in
@@ -110,7 +110,7 @@ module.
 
 We were not able to date to remove or rename these unnecessary (to us anyway) fields.
 
-# Scala-related method ambiguity
+## Scala-related method ambiguity
 
 Finally, an issue came up when using these Marker based variants of the
 log methods:
