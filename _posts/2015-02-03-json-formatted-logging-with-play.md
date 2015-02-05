@@ -48,7 +48,7 @@ The facility Logback JSON Encoder uses to add user defined fields to the emitted
 
 See [Event-Specific Custom Fields](https://github.com/logstash/logstash-logback-encoder#loggingevent_custom_event)
 
-# Play! Logging With org.slf4j.Markers - the Built-In Logger
+# Play! Logging with Markers - the Built-In Logger
 
 Given we are using Play! the straight forward way to get hold of a Logger instance is
 to import Play!'s play.api.Logger:
@@ -66,7 +66,7 @@ One solution is to augment LoggerLike with an implicit trait, but we found that 
 source location information in error log events. Not good.
 
 
-# -Play!- Logging with Markers - 2^nd Try
+# Logging with Markers - without Play
 
 An alternative to augmenting Play's logger is to use a logging library that properly implements
 the Marker-variants of the log methods.
@@ -105,7 +105,7 @@ It took some digging to find out the corresponding XML tag names but the above r
 most of the clutter.  Unfortunately [Logback Access](http://logback.qos.ch/access.html)
 adds some [field names of its own](https://github.com/logstash/logstash-logback-encoder/blob/master/src/main/java/net/logstash/logback/fieldnames/LogstashAccessFieldNames.java),
 even for log events that do not pertain to any HTTP requests. For example
-the 'HOSTNAME' and 'application.home' fields seem to originate from that
+the `HOSTNAME` and `application.home` fields seem to originate from that
 module.
 
 We were not able to date to remove or rename these unnecessary (to us anyway) fields.
