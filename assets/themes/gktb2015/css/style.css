@@ -1,4 +1,9 @@
-/* GKTB2015 theme */
+/***
+ *  GKTB2015 theme for jekyll
+ *
+ *  by <rico.pfaus@kaufhof.de>
+ *
+ */
 
 /*** BASICS ***/
 
@@ -137,15 +142,33 @@ ul {
 
 /*** LISTS ***/
 
-.gk-list-posts--post {
-  padding: 0 0 30px;
-}
 
 
 /*** POST ***/
 
-.gk-post {
+/* post preview */
+.gk-post-preview {
+  margin-bottom: 30px;
+}
+.gk-post-preview--header {
+    margin-bottom: 10px;
+}
+.gk-post-preview--date {
+  color: #999999;
+  font-size: 0.8rem;
+  padding-right: 10px;
+}
+.gk-post-preview--title {
+  font-size: 1.2rem;
+}
+.gk-post-preview--body {
+  padding: 0;
+  margin: 0;
+}
 
+/* post details */
+.gk-post h2 {
+  margin-top: 2rem;
 }
 
 

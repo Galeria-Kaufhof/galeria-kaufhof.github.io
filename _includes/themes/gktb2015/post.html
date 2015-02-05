@@ -1,19 +1,21 @@
 {% assign author = site.authors[page.author] %}
 
-<div class="page-header">
-  <h1>{{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}</h1>
-</div>
-
-<div class="row post-full">
+<div class="gk-post">
   <div class="col-xs-12">
+
+    <div class="gk-post--title">
+      <h1>{{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}</h1>
+    </div>
+
+    <div class="gk-post--date">
+      <span>{{ page.date | date: "%B %-d, %Y" }}</span>
+    </div>
+
     <div class="author-image">
       <img src="http://www.gravatar.com/avatar/{{ author.gravatar }}?s=60">
     </div>
     <div class="author-name">
       by {{ author.display_name }}
-    </div>
-    <div class="date">
-      <span>{{ page.date | date: "%B %-d, %Y" }}</span>
     </div>
     <div class="content">
       {{ content }}
@@ -25,7 +27,7 @@
       {% assign categories_list = page.categories %}
       {% include JB/categories_list %}
     </ul>
-  {% endunless %}  
+  {% endunless %}
 
   {% unless page.tags == empty %}
     <ul class="tag_box inline">
@@ -33,8 +35,8 @@
       {% assign tags_list = page.tags %}
       {% include JB/tags_list %}
     </ul>
-  {% endunless %}  
-  
+  {% endunless %}
+
     <hr>
     <ul class="pagination">
     {% if page.previous %}
