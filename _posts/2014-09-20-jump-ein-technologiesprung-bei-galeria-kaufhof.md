@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Jump - Ein Technologie-Sprung bei Galeria Kaufhof"
-description: ""
+description: "Jetzt ist es offiziell: Seit 6 Monaten arbeiten wir von inoio zusammen mit weiteren Dienstleistern und Galeria Kaufhof an deren neuer Multi-Channel Online Plattform - Projektname “Jump”. Mit dem neuen System soll die Time-to-Market erheblich reduziert werden, wenn es um die Einbindung und Entwicklung neuer Features geht."
 category: general
 author: martingrotzke
 tags: [inoio, scala, cassandra, architecture]

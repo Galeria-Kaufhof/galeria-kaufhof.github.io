@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Setting up a Scala sbt multi project with Cassandra connectivity and migrations"
-description: ""
+description: "I have recently joined the new multi-channel retail eCommerce project at Galeria Kaufhof in Cologne. This meant diving head-first into a large-scale Scala/Play/Akka/Ruby software ecosystem, and as a consequence, a lot of learning (and unlearning, and disorientation, and some first small successes), as I’m still quite new to Scala."
 category: tutorials
 author: manuelkiessling
 tags: [scala, sbt, cassandra, migrations, pillar, assembly]
@@ -127,11 +127,11 @@ First, we will create a case class that represents a Cassandra connection URI. L
 which resides in file `common/src/test/scala/common/utils/cassandra/CassandraConnectionUriSpec.scala`:
 
     package common.utils.cassandra
-    
+
     import org.scalatest.{Matchers, FunSpec}
-    
+
     class CassandraConnectionUriSpec extends FunSpec with Matchers {
-    
+
       describe("A Cassandra connection URI object") {
         it("should parse a URI with a single host") {
           val cut = CassandraConnectionUri("cassandra://localhost:9042/test")
@@ -150,7 +150,7 @@ which resides in file `common/src/test/scala/common/utils/cassandra/CassandraCon
           cut.keyspace should be ("test")
         }
       }
-    
+
     }
 
 Creating this spec leads to `common` depending on the *scalatest* library. We need to declare this dependency in our
@@ -158,7 +158,7 @@ Creating this spec leads to `common` depending on the *scalatest* library. We ne
 declaration into a `val` which can be reused:
 
     name := "My Project"
-    
+
     val commonSettings = Seq(
       organization := "net.example",
       version := "0.1",
@@ -169,14 +169,14 @@ declaration into a `val` which can be reused:
     lazy val testDependencies = Seq (
       "org.scalatest" %% "scalatest" % "2.2.0" % "test"
     )
-    
+
     lazy val common = project.in(file("common"))
       .settings(commonSettings:_*)
       .settings(libraryDependencies ++= testDependencies)
-    
+
     lazy val playApp = project.in(file("playApp"))
       .settings(commonSettings:_*)
-    
+
     lazy val main = project.in(file("."))
       .aggregate(common, playApp)
 
@@ -185,23 +185,23 @@ spec is against a still missing implementation. Let's change that by putting the
 `common/src/main/scala/common/utils/cassandra/CassandraConnectionUri.scala`:
 
     package common.utils.cassandra
-    
+
     import java.net.URI
-    
+
     case class CassandraConnectionUri(connectionString: String) {
-    
+
       private val uri = new URI(connectionString)
-    
+
       private val additionalHosts = Option(uri.getQuery) match {
         case Some(query) => query.split('&').map(_.split('=')).filter(param => param(0) == "host").map(param => param(1)).toSeq
         case None => Seq.empty
       }
-    
+
       val host = uri.getHost
       val hosts = Seq(uri.getHost) ++ additionalHosts
       val port = uri.getPort
       val keyspace = uri.getPath.substring(1)
-    
+
     }
 
 Running `test` in the sbt console will now result in a first successful test run:
@@ -254,10 +254,10 @@ that returns a Cassandra database connection session; put it into
 This is a relatively straight-forward implementation which can be used like this:
 
     import common.utils.cassandra._
-    
+
     val uri = CassandraConnectionUri("cassandra://localhost:9042/test")
     val session = Helper.createSessionAndInitKeyspace(uri)
-    
+
     session.execute(/* Some CQL string */)
 
 We need to add the Cassandra driver to our dependencies, making `build.sbt` look like this:
@@ -294,33 +294,33 @@ please create the file `common/src/test/scala/common/utils/cassandra/ConnectionA
 code:
 
     package common.utils.cassandra
-    
+
     import com.datastax.driver.core.querybuilder.QueryBuilder
     import com.datastax.driver.core.querybuilder.QueryBuilder._
     import org.scalatest.{Matchers, FunSpec}
-    
+
     class ConnectionAndQuerySpec extends FunSpec with Matchers {
-      
+
       describe("Connecting and querying a Cassandra database") {
         it("should just work") {
           val uri = CassandraConnectionUri("cassandra://localhost:9042/test")
           val session = Helper.createSessionAndInitKeyspace(uri)
-          
+
           session.execute("CREATE TABLE IF NOT EXISTS things (id int, name text, PRIMARY KEY (id))")
           session.execute("INSERT INTO things (id, name) VALUES (1, 'foo');")
-    
+
           val selectStmt = select().column("name")
             .from("things")
             .where(QueryBuilder.eq("id", 1))
             .limit(1)
-          
+
           val resultSet = session.execute(selectStmt)
           val row = resultSet.one()
           row.getString("name") should be("foo")
           session.execute("DROP TABLE things;")
         }
       }
-    
+
     }
 
 Now, there is one thing that needs to be done that is outside of the scope of our code, and that is the creation of the
@@ -356,7 +356,7 @@ if this directory resides in the file system or within a JAR file. Greg Briggs h
 which we are going to use:
 
     package common.utils.cassandra;
-    
+
     import java.io.File;
     import java.io.IOException;
     import java.net.URISyntaxException;
@@ -367,9 +367,9 @@ which we are going to use:
     import java.util.Set;
     import java.util.jar.JarEntry;
     import java.util.jar.JarFile;
-    
+
     public class JarUtils {
-    
+
         /**
          * List directory contents for a resource folder. Not recursive.
          * This is basically a brute-force implementation.
@@ -388,7 +388,7 @@ which we are going to use:
             /* A file path: easy enough */
                 return new File(dirURL.toURI()).list();
             }
-    
+
             if (dirURL == null) {
             /*
              * In case of a jar file, we can't actually find a directory.
@@ -397,7 +397,7 @@ which we are going to use:
                 String me = clazz.getName().replace(".", "/") + ".class";
                 dirURL = clazz.getClassLoader().getResource(me);
             }
-    
+
             if (dirURL.getProtocol().equals("jar")) {
             /* A JAR path */
                 String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!")); //strip out only the JAR file
@@ -418,10 +418,10 @@ which we are going to use:
                 }
                 return result.toArray(new String[result.size()]);
             }
-    
+
             throw new UnsupportedOperationException("Cannot list files for URL " + dirURL);
         }
-    
+
     }
 
 Note that this is Java code, not Scala. We therefore need to put it into
@@ -431,20 +431,20 @@ Next up is some wrapper code that gives us an easy to handle *Pillar* object to 
 goes into `common/src/main/scala/common/utils/cassandra/Pillar.scala`:
 
     package common.utils.cassandra
-    
+
     import com.chrisomeara.pillar._
     import com.datastax.driver.core.Session
-    
+
     object Pillar {
-    
+
       private val registry = Registry(loadMigrationsFromJarOrFilesystem())
       private val migrator = Migrator(registry)
-    
+
       private def loadMigrationsFromJarOrFilesystem() = {
         val migrationsDir = "migrations/"
         val migrationNames = JarUtils.getResourceListing(getClass, migrationsDir).toList.filter(_.nonEmpty)
         val parser = Parser()
-    
+
         migrationNames.map(name => getClass.getClassLoader.getResourceAsStream(migrationsDir + name)).map {
           stream =>
             try {
@@ -454,7 +454,7 @@ goes into `common/src/main/scala/common/utils/cassandra/Pillar.scala`:
             }
         }.toList
       }
-    
+
       def initialize(session: Session, keyspace: String, replicationFactor: Int): Unit = {
         migrator.initialize(
           session,
@@ -462,7 +462,7 @@ goes into `common/src/main/scala/common/utils/cassandra/Pillar.scala`:
           new ReplicationOptions(Map("class" -> "SimpleStrategy", "replication_factor" -> replicationFactor))
         )
       }
-    
+
       def migrate(session: Session): Unit = {
         migrator.migrate(session)
       }
@@ -524,32 +524,32 @@ We can now change our *ConnectionAndQuery* spec in file
 table we test against within the spec itself - our migration will take care of this:
 
     package common.utils.cassandra
-    
+
     import com.datastax.driver.core.querybuilder.QueryBuilder
     import com.datastax.driver.core.querybuilder.QueryBuilder._
     import org.scalatest.{Matchers, FunSpec}
-    
+
     class ConnectionAndQuerySpec extends FunSpec with Matchers {
-      
+
       describe("Connecting and querying a Cassandra database") {
         it("should just work") {
           val uri = CassandraConnectionUri("cassandra://localhost:9042/test")
           val session = Helper.createSessionAndInitKeyspace(uri)
-          
+
           session.execute("INSERT INTO things (id, name) VALUES (1, 'foo');")
-    
+
           val selectStmt = select().column("name")
             .from("things")
             .where(QueryBuilder.eq("id", 1))
             .limit(1)
-          
+
           val resultSet = session.execute(selectStmt)
           val row = resultSet.one()
           row.getString("name") should be("foo")
           session.execute("TRUNCATE things;")
         }
       }
-    
+
     }
 
 
@@ -677,7 +677,7 @@ code that connects to the database:
       }
 
     }
-    
+
 This, however, won't compile, because the *playApp* module won't be able to find the classes in the *common* module all
 by itself - it needs a hint in our `build.sbt` file:
 
@@ -727,11 +727,11 @@ With this, we can add another migration, in file
     -- description: add count column to things table
     -- authoredAt: 1421266233000
     -- up:
-    
+
     ALTER TABLE things ADD color text;
-    
+
     -- down:
-    
+
     ALTER TABLE things DROP color;
 
 ...and have it applied by running the Play app...:
@@ -742,11 +742,11 @@ With this, we can add another migration, in file
     > project playApp
     [info] Set current project to playApp (in build file:/Users/manuelkiessling/myproject/)
     [playApp] $ run
-    
+
     --- (Running the application, auto-reloading is enabled) ---
-    
+
     [info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
-    
+
     (Server started, use Ctrl+D to stop and go back to the console...)
 
 ...and requesting `http://localhost:9000/` (Play only actually runs the application when requests come in).

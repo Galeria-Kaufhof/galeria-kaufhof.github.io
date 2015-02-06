@@ -33,7 +33,7 @@ authors:
     web: http://www.inoio.de
     twitter: martin_grotzke
     github: magro
-    
+
   janalgermissen:
     display_name: Jan Algermissen
     gravatar: ec21ce28e9a469b3eb148daad9935c89
@@ -159,3 +159,12 @@ JB :
   # and include your custom code. Your custom file must be defined at:
   #   ./_includes/custom/[HELPER]
   # where [HELPER] is the name of the helper you are overriding.
+
+  tags_list :
+    provider : "custom"
+
+  categories_list :
+    provider : "custom"
+
+  posts_collate :
+    provider : "custom"

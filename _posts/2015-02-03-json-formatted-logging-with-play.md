@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JSON Formatted Logging With Play"
-description: ""
+description: "The multi-channel retailing platform we are building at GALERIA Kaufhof provides centralised logging for all deployed applications and services. In order to leverage this common logging facility for upcoming metrics and analytics use cases we picked JSON as the agreed upon log format across all domains."
 category: tutorials
 author: janalgermissen
 tags: [scala,play,logging]
@@ -9,7 +9,7 @@ tags: [scala,play,logging]
 {% include JB/setup %}
 
 The [multi-channel retailing platform we are building at GALERIA Kaufhof](http://www.startplatz.de/event/galeria-sucht-hacker/) provides
-centralised logging for all deployed applications and services. In order to leverage this common logging facility for 
+centralised logging for all deployed applications and services. In order to leverage this common logging facility for
 upcoming metrics and analytics use cases we picked JSON as the agreed upon log format across all
 domains.
 
@@ -26,9 +26,11 @@ add this to your sbt project as the following dependency in the build.sbt:
 Then configure logging in logger.xml with the minimal addition of this encoder to
 the desired appender:
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-    </appender>
+{% highlight XML %}
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+  <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+</appender>
+{% endhighlight %}
 
 Logback will now start to write one-line JSON documents to your log file, properly escaping double quotes
 and newlines.
@@ -42,11 +44,11 @@ The facility Logback JSON Encoder uses to add user defined fields to the emitted
 
     import net.logstash.logback.marker.Markers._
     import scala.collection.JavaConversions._ // appendEntries() expects a Java Map
-    
+
     logger.info(append("name", "value"), "log message")
-    
+
     logger.info(append("name1", "value1").and(append("name2", "value2")), "log message")
-    
+
     val fields = Map( "productId" -> "123456" , "traceId" -> "98765" )
     logger.info(appendEntries(fields), "log message")
 
@@ -59,7 +61,7 @@ to import Play's play.api.Logger:
 
     import play.api.Logger
     import net.logstash.logback.marker.Markers._
-    
+
     Logger.info(append("name", "value"), "log message")
 
 When you try to run this, the compiler will complain that Logger.info isn't applicable to
@@ -85,11 +87,19 @@ In addition Scala Logging comes with nice features such as the
 ## Verbosity...
 
 Logstash JSON Encoder is a little verbose (to say the least):
-
-    {"@timestamp":"2015-02-05T08:13:48.566+01:00","@version":1,"message":"What we logged...","logger_name":"application", \
-      "thread_name":"application-akka.actor.default-dispatcher-11","level":"INFO","level_value":20000,"HOSTNAME":"myhost.mydomain", \
-      "application.home":"/Users/.../universal/stage"}
-
+{% highlight JSON %}
+{
+  "@timestamp":"2015-02-05T08:13:48.566+01:00",
+  "@version":1,
+  "message":"What we logged...",
+  "logger_name":"application",
+  "thread_name":"application-akka.actor.default-dispatcher-11",
+  "level":"INFO",
+  "level_value":20000,
+  "HOSTNAME":"myhost.mydomain",
+  "application.home":"/Users/.../universal/stage"
+}
+{% endhighlight %}
 Besides reducing the amount of data logged we also wanted to rename some fields to avoid
 overlap with fields added by other tools in the logging chain. We also wanted to shorten
 the names.
@@ -97,21 +107,23 @@ the names.
 Logstash JSON Encoder [lets you do this](https://github.com/logstash/logstash-logback-encoder#custom_field_names)
  in the logger configuration. For example:
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-        <fieldNames>
-          <timestamp>ts</timestamp>
-          <message>msg</message>
-          <thread>[ignore]</thread>
-          <levelValue>[ignore]</levelValue>
-          <logger>logger</logger>
-          <version>[ignore]</version>
-        </fieldNames>
-      </encoder>
-    </appender>
+{% highlight XML %}
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+  <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+    <fieldNames>
+      <timestamp>ts</timestamp>
+      <message>msg</message>
+      <thread>[ignore]</thread>
+      <levelValue>[ignore]</levelValue>
+      <logger>logger</logger>
+      <version>[ignore]</version>
+    </fieldNames>
+  </encoder>
+</appender>
+{% endhighlight %}
 
 It took some digging to find out the corresponding XML tag names but the above removes
-most of the clutter. 
+most of the clutter.
 
 There are also the context-fields `HOSTNAME` and `application.home` which you can remove
 from the JSON output by disabeling the context:
@@ -127,14 +139,14 @@ Finally, an issue came up when using these Marker based variants of the
 log methods:
 
     logger.info(append("name", "value"), "log message")
-    
+
     logger.info(append("name1", "value1").and(append("name2", "value2")), "log message")
 
 For Scala these are ambiguous with other logging methods so the above did
 not compile in our case (using Scala up to 2.11.5) - Thinking about it, this might just be the
 reason why Play's LoggerLike does not provide the methods in the first place...
 
-Anyhow, using only the 
+Anyhow, using only the
 
     val fields = Map( "productId" -> "123456" , "traceId" -> "98765" )
     logger.info(appendEntries(fields), "log message")
@@ -143,8 +155,3 @@ variants of the logging methods solves this problem and these seem like the nice
 to use in most cases anyhow.
 
 That's your JSON logging in Play Framework.
-
-
-
-
-    
