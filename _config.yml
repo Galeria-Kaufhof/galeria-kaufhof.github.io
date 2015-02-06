@@ -33,6 +33,14 @@ authors:
     web: http://www.inoio.de
     twitter: martin_grotzke
     github: magro
+    
+  janalgermissen:
+    display_name: Jan Algermissen
+    gravatar: ec21ce28e9a469b3eb148daad9935c89
+    email: jan.algermissen@talentformation.com
+    web: http://algermissen.blogspot.de
+    twitter: algermissen
+    github: algermissen
 
 
 # The production_url is only used when full-domain names are needed
