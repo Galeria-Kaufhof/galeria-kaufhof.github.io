@@ -20,11 +20,11 @@ body {
 a,
 a:visited {
   text-decoration: none;
-  color: #006d48;
+  color: #008d28; /*#006d48;*/
 }
 a:hover {
   text-decoration: underline;
-  color: #004a37;
+  color: #006d48; /*#004a37;*/
 }
 
 /* codeblocks */
@@ -88,14 +88,17 @@ ul {
 /*** HEADER ***/
 
 .gk-header {
-  margin: 30px 0;
+  margin: 30px 0 50px;
 }
 
 .gk-header--logo {
   display: block;
-  width: 200px;
-  height: 50px;
-  background: url(../img/gk-logo.png);
+  width: 201px;
+  height: 70px;
+  background: url(../img/gktb-logo.png);
+}
+.gk-header--logo span {
+  display: none;
 }
 
 .gk-header--navigation {
@@ -125,15 +128,20 @@ ul {
 }
 .gk-icon--github {
   width: 29px;
-  background-image: url(../img/gktb-icon-github.png)
+  background-image: url(../img/gktb-icon-github.png);
 }
 .gk-icon--menu {
   width: 28px;
-  background-image: url(../img/gktb-icon-menu.png)
+  background-image: url(../img/gktb-icon-menu.png);
 }
 .gk-icon--search {
   width: 30px;
-  background-image: url(../img/gktb-icon-search.png)
+  background-image: url(../img/gktb-icon-search.png);
+}
+.gk-icon--rss {
+  width: 28px;
+  height: 28px;
+  background-image: url(../img/feed-icon-28x28.png);
 }
 
 
@@ -146,6 +154,7 @@ ul {
   color: #eee;
   padding: 50px;
   margin-top: 100px;
+  border-top: solid 20px #000;
 }
 .gk-footer--inner {
 
@@ -154,6 +163,11 @@ ul {
   text-align: center;
   margin-top: 100px;
   font-size: 0.7rem;
+}
+
+/* navigation */
+.gk-footer--navigation li {
+  margin-bottom: 5px;
 }
 
 /*searchbox */
@@ -178,8 +192,11 @@ ul {
   height: 32px;
   border: none;
   color: #eee;
-  background: url(../img/gk-icon-search.png);
+  background: url(../img/gktb-icon-search.png) center center;
   cursor: pointer;
+}
+.gk-searchbox--button span {
+  display: none;
 }
 
 
