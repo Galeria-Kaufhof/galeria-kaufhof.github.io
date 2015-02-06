@@ -2,60 +2,69 @@
 
 <div class="gk-post">
 
-  <div class="gk-post--headline">
-    <div class="gk-post--subline">
+  <div class="gk-post__headline">
+    <div class="gk-post__subline">
       <span>{{ page.date | date: "%B %-d, %Y" }}</span>
     </div>
-    <div class="gk-post--title">
-      __ {{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}
+    <div class="gk-post__title">
+      {{ page.title }} {% if page.tagline %}<small>{{page.tagline}}</small>{% endif %}
     </div>
   </div>
 
-  <div class="gk-post--content">
+  <div class="gk-post__content">
     {{ content }}
   </div>
 
-  <div class="gk-post--author">
-    <span class="gk-post--author--image">
+  <div class="gk-post__author">
+    <span class="gk-post__author__image">
       <img src="http://www.gravatar.com/avatar/{{ author.gravatar }}?s=60" />
     </span>
-    <span class="gk-post--author--name">
+    <span class="gk-post__author__name">
       by {% if author.twitter %}<a href="http://twitter.com/{{author.twitter}}" target="_blank">{%endif%}{{ author.display_name }}{% if author.twitter %}</a>{%endif%}
     </span>
   </div>
 
 {% unless page.categories == empty %}
-  <ul class="tag_box inline">
-    <li><i class="glyphicon glyphicon-open"></i></li>
-    {% assign categories_list = page.categories %}
-    {% include JB/categories_list %}
-  </ul>
+  <div class="gk-post__categories">
+    <i>Filed under</i><br />
+    <ul class="gk-tagbox gk-list--inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      {% assign categories_list = page.categories %}
+      {% include JB/categories_list %}
+    </ul>
+  </div>
 {% endunless %}
 
 {% unless page.tags == empty %}
-  <ul class="tag_box inline">
-    <li><i class="glyphicon glyphicon-tags"></i></li>
-    {% assign tags_list = page.tags %}
-    {% include JB/tags_list %}
-  </ul>
+  <div class="gk-post__tags">
+    <i>Tagged with </i><br />
+    <ul class="gk-tagbox gk-list--inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      {% assign tags_list = page.tags %}
+      {% include JB/tags_list %}
+    </ul>
+  </div>
 {% endunless %}
 
-  <hr>
-  <ul class="pagination">
-  {% if page.previous %}
-    <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&laquo; Previous</a></li>
-  {% else %}
-    <li class="prev disabled"><a>&larr; Previous</a></li>
-  {% endif %}
-    <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></li>
-  {% if page.next %}
-    <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &raquo;</a></li>
-  {% else %}
-    <li class="next disabled"><a>Next &rarr;</a>
-  {% endif %}
-  </ul>
+<!--
+  <div class="gk-post__pagination">
+    <ul>
+    {% if page.previous %}
+      <li class="gk-pagination__prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&laquo; Previous</a></li>
+    {% else %}
+      <li class="gk-pagination__prev gk-pagination__prev--disabled"><a>&larr; Previous</a></li>
+    {% endif %}
+    {% if page.next %}
+      <li class="gk-pagination__next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &raquo;</a></li>
+    {% else %}
+      <li class="gk-pagination__next gk-pagination__next--disabled"><a>Next &rarr;</a>
+    {% endif %}
+    </ul>
+  </div>
+-->
 
-  <hr /><br />
+  <div class="gk-post__comments">
   {% include JB/comments %}
+  </div>
 
 </div>

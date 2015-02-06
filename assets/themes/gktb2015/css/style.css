@@ -39,7 +39,9 @@ code {
   font-size: 0.8rem;
   padding: 0.2rem;
 }
-
+pre code {
+  padding: 0;
+}
 ul {
   list-style: none;
   margin: 0;
@@ -58,8 +60,8 @@ ul {
 }
 
 /* inner wrapper to force fixed width */
-.gk-wrapper--inner,
-.gk-footer--inner {
+.gk-wrapper__inner,
+.gk-footer__inner {
   max-width: 960px;
   margin: 0px auto;
   padding: 0 1em;
@@ -80,7 +82,7 @@ ul {
 }
 
 /* alignment */
-.gk-align-right {
+.gk--align-right {
   text-align: right;
 }
 
@@ -91,32 +93,32 @@ ul {
   margin: 30px 0 50px;
 }
 
-.gk-header--logo {
+.gk-header__logo {
   display: block;
   width: 201px;
   height: 70px;
-  background: url(../img/gktb-logo.png);
+  background: url(../img/gktb-logo.svg) no-repeat;
 }
-.gk-header--logo span {
+.gk-header__logo span {
   display: none;
 }
 
-.gk-header--navigation {
+.gk-header__navigation {
   list-style: none;
   text-align: right;
 }
-.gk-header--navigation li {
+.gk-header__navigation li {
   display: inline;
   margin-left: 20px;
 }
-.gk-header--navigation a {
+.gk-header__navigation a {
   border-bottom: solid 5px #ffffff;
   padding: 0 0 5px;
 }
-.gk-header--navigation a:hover {
+.gk-header__navigation a:hover {
   border-color: #006d48;
 }
-.gk-header--navigation a span {
+.gk-header__navigation a span {
   display: none;
 }
 
@@ -156,17 +158,18 @@ ul {
   margin-top: 100px;
   border-top: solid 20px #000;
 }
-.gk-footer--inner {
+.gk-footer__inner {
 
 }
-.gk-footer--copy {
+.gk-footer__copy {
   text-align: center;
   margin-top: 100px;
   font-size: 0.7rem;
+  color: #999;
 }
 
 /* navigation */
-.gk-footer--navigation li {
+.gk-footer__navigation li {
   margin-bottom: 5px;
 }
 
@@ -177,7 +180,7 @@ ul {
   border: solid 1px #eee;
   border-radius: 4px;
 }
-.gk-searchbox--input {
+.gk-searchbox__input {
   margin: 0;
   background: none;
   border: none;
@@ -186,7 +189,7 @@ ul {
   line-height: 1rem;
   font-size: 0.8rem;
 }
-.gk-searchbox--button {
+.gk-searchbox__button {
   display: inline-block;
   width: 32px;
   height: 32px;
@@ -195,13 +198,16 @@ ul {
   background: url(../img/gktb-icon-search.png) center center;
   cursor: pointer;
 }
-.gk-searchbox--button span {
+.gk-searchbox__button span {
   display: none;
 }
 
 
 /*** LISTS ***/
 
+.gk-list--inline li {
+  display: inline;
+}
 
 
 /*** POST PREVIEW ***/
@@ -210,18 +216,19 @@ ul {
 .gk-post-preview {
   margin-bottom: 30px;
 }
-.gk-post-preview--header {
+.gk-post-preview__header {
     margin-bottom: 10px;
 }
-.gk-post-preview--date {
+.gk-post-preview__date,
+.gk-posts-collate__date {
   color: #999999;
   font-size: 0.8rem;
   padding-right: 10px;
 }
-.gk-post-preview--title {
+.gk-post-preview__title {
   font-size: 1.2rem;
 }
-.gk-post-preview--body {
+.gk-post-preview__body {
   padding: 0;
   margin: 0;
 }
@@ -230,12 +237,12 @@ ul {
 /*** POST FULL ***/
 
 /* headline */
-.gk-post--subline {
+.gk-post__subline {
   font-size: 0.8rem;
   color: #999;
   margin: 0 0 0.3rem;
 }
-.gk-post--title {
+.gk-post__title {
   font-size: 2rem;
   line-height: 2.3rem;
   font-weight: bold;
@@ -245,30 +252,79 @@ ul {
 }
 
 /* post content elements */
-.gk-post--content {
+.gk-post__content {
   margin-bottom: 2rem;
 }
-.gk-post--content img {
+.gk-post__content img {
   max-width: 100%;
 }
-.gk-post--content p {
+.gk-post__content p {
   word-wrap: break-word;
   margin: 0 0 1rem;
 }
-.gk-post--content h2 {
+.gk-post__content h2 {
   margin: 2rem 0 1rem;
 }
-.gk-post--content h3 {
+.gk-post__content h3 {
   margin: 0.7rem 0 0.5rem;
 }
 
 /* author info */
-.gk-post--author {
+.gk-post__author {
   margin-bottom: 2rem;
 }
-.gk-post--author--image img {
+.gk-post__author__image img {
   vertical-align: middle;
 }
-.gk-post--author--name {
+.gk-post__author__name {
   font-style: italic;
 }
+
+/* categories */
+.gk-post__categories {
+  margin-bottom: 30px;
+}
+
+/* tags */
+.gk-post__tags {
+  margin-bottom: 30px;
+}
+
+/* tags */
+.gk-post__pagination {
+  margin-bottom: 50px;
+}
+
+/* comments */
+.gk-post__comments {
+
+}
+
+
+/*** TAGBOX ***/
+.gk-tagbox {
+  display: inline;
+}
+.gk-tagbox__tag {
+  display: inline-block;
+  margin: 0 10px 10px 0;
+  white-space: nowrap;
+}
+.gk-tagbox__tag a {
+  display: inline-block;
+  background: #eee;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  padding: 0.35rem;
+  color: #333;
+}
+.gk-tagbox__tag__count {
+  background: #999;
+  border-radius: 12px;
+  color: #eee;
+  padding: 2px 5px;
+  font-size: 0.5rem;
+}
+
+
+/*** POSTS COLLATE ***/
