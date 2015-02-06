@@ -110,13 +110,15 @@ Logstash JSON Encoder [lets you do this](https://github.com/logstash/logstash-lo
     </appender>
 
 It took some digging to find out the corresponding XML tag names but the above removes
-most of the clutter.  Unfortunately [Logback Access](http://logback.qos.ch/access.html)
-adds some [field names of its own](https://github.com/logstash/logstash-logback-encoder/blob/master/src/main/java/net/logstash/logback/fieldnames/LogstashAccessFieldNames.java),
-even for log events that do not pertain to any HTTP requests. For example
-the `HOSTNAME` and `application.home` fields seem to originate from that
-module.
+most of the clutter. 
 
-We were not able to date to remove or rename these unnecessary (to us anyway) fields.
+There are also the context-fields `HOSTNAME` and `application.home` which you can remove
+from the JSON output by disabeling the context:
+
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <includeContext>false</includeContext>
+      ...
+    </encode>
 
 ## Scala-related method ambiguity
 
@@ -131,13 +133,13 @@ For Scala these are ambiguous with other logging methods so the above did
 not compile in our case (using Scala up to 2.11.5) - Thinking about it, this might just be the
 reason why Play's LoggerLike does not provide the methods in the first place...
 
-Anyhow, using the 
+Anyhow, using only the 
 
     val fields = Map( "productId" -> "123456" , "traceId" -> "98765" )
     logger.info(appendEntries(fields), "log message")
 
-variant only solves this problem and seems like the nicer method to use
-in most cases anyhow.
+variants of the logging methods solves this problem and these seem like the nicer methods
+to use in most cases anyhow.
 
 That's your JSON logging in Play Framework.
 
