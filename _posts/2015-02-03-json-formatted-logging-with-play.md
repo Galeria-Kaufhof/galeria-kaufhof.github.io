@@ -2,7 +2,8 @@
 layout: post
 title: "JSON Formatted Logging With Play"
 description: ""
-category:
+category: tutorials
+author: janalgermissen
 tags: [scala,play,logging]
 ---
 {% include JB/setup %}
