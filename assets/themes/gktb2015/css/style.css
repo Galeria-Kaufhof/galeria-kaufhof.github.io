@@ -20,7 +20,7 @@ body {
 a,
 a:visited {
   text-decoration: none;
-  color: #008d28; /*#006d48;*/
+  color: #007551;
 }
 a:hover {
   text-decoration: underline;
@@ -95,9 +95,9 @@ ul {
 
 .gk-header__logo {
   display: block;
-  width: 201px;
-  height: 70px;
-  background: url(../img/gktb-logo.svg) no-repeat;
+  width: 120px;
+  height: 75px;
+  background: url(../img/Galeria_Kaufhof-small.png) no-repeat;
 }
 .gk-header__logo span {
   display: none;
