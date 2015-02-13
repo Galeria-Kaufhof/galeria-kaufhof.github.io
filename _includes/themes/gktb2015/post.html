@@ -11,10 +11,6 @@
     </div>
   </div>
 
-  <div class="gk-post__content">
-    {{ content }}
-  </div>
-
   <div class="gk-post__author">
     <span class="gk-post__author__image">
       <img src="http://www.gravatar.com/avatar/{{ author.gravatar }}?s=60" />
@@ -24,9 +20,13 @@
     </span>
   </div>
 
+  <div class="gk-post__content">
+    {{ content }}
+  </div>
+  
 {% unless page.categories == empty %}
   <div class="gk-post__categories">
-    <i>Filed under</i><br />
+    Filed under
     <ul class="gk-tagbox gk-list--inline">
       <li><i class="glyphicon glyphicon-open"></i></li>
       {% assign categories_list = page.categories %}
@@ -37,7 +37,7 @@
 
 {% unless page.tags == empty %}
   <div class="gk-post__tags">
-    <i>Tagged with </i><br />
+    Tagged with
     <ul class="gk-tagbox gk-list--inline">
       <li><i class="glyphicon glyphicon-tags"></i></li>
       {% assign tags_list = page.tags %}
