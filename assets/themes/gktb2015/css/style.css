@@ -220,7 +220,8 @@ ul {
     margin-bottom: 10px;
 }
 .gk-post-preview__date,
-.gk-posts-collate__date {
+.gk-posts-collate__date,
+.gk-post-preview__author {
   color: #999999;
   font-size: 0.8rem;
   padding-right: 10px;
