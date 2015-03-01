@@ -10,9 +10,6 @@ tags: [scala, play2, json]
 ---
 {% include JB/setup %}
 
-*Dies ist ein Cross-Post vom
-[Blog der Agentur inoio](http://www.inoio.de/blog/2014/09/20/technologie-sprung-bei-galeria-kaufhof/)*
-
 Als Anfänger in der Arbeit mit Scala und Play2 stehe ich aktuell vor der Aufgabe, eine einfache Webservice API mit Scala
 & Play2 zu realisieren.
 
