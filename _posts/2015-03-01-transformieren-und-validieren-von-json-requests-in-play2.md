@@ -67,7 +67,7 @@ Ein `FormExperiment` wiederum beinhaltet eine Liste von `FormVariation` Objekten
       weight: Double
     )
 
-Ein `FormExperiment` mit einer Liste von `Formvariation` Objekten wird durch die Persistierung zu einem `Experiment` mit
+Ein `FormExperiment` mit einer Liste von `FormVariation` Objekten wird durch die Persistierung zu einem `Experiment` mit
 einer Liste von `Variation` Objekten, und damit zu "richtigen" fachlichen Entitäten im Sinne der Businesslogik der
 Anwendung. Auf die Details hierzu gehe ich jedoch nicht ein - im Folgenden zeige ich, wie aus dem JSON des eingehenden
 Requests ein `FormExperiment` mit einer Liste von `FormVariation` Objekten wird, und wie sichergestellt wird dass dies
