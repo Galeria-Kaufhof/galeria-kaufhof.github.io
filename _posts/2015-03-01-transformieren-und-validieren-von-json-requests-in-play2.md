@@ -10,8 +10,8 @@ tags: [scala, play2, json]
 ---
 {% include JB/setup %}
 
-Als Anfänger in der Arbeit mit Scala und Play2 stehe ich aktuell vor der Aufgabe, eine einfache Webservice API mit Scala
-& Play2 zu realisieren.
+Als Anfänger in der Arbeit mit Scala stehe ich aktuell vor der Aufgabe, eine einfache Webservice API in Play2 zu
+realisieren.
 
 Der Webservice hat einen Endpunkt `/api/experiments`, über den via POST ein A/B Test (bzw. *Experiment*) mit 2 oder mehr
 Varianten angelegt werden kann.
