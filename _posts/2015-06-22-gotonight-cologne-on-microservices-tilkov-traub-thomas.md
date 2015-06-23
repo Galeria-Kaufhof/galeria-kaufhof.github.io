@@ -34,6 +34,13 @@ people following the stream that are not affiliated with the event itself:
 
 <br clear="all">
 
+The slides of Stefan Tilkov's Talk <em>Microservices: Awesome, as long as they are neither ‘micro’ nor ‘services’</em>
+are available, too:
+
+<script async class="speakerdeck-embed" data-id="ae63cff974a240d9959b47b8beae96a2" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+<br clear="all">
+
 The event also sparked quite some activity on Twitter:
 
 <blockquote class="twitter-tweet" lang="de"><p lang="en" dir="ltr">Last slide preparations by <a href="https://twitter.com/stilkov">@stilkov</a>. <a href="https://twitter.com/hashtag/GOTOnight?src=hash">#GOTOnight</a> <a href="https://twitter.com/hashtag/Cologne?src=hash">#Cologne</a> <a href="https://twitter.com/galeriakaufhof">@galeriakaufhof</a> <a href="http://t.co/nL0tTlIyvI">pic.twitter.com/nL0tTlIyvI</a></p>&mdash; Manuel Kiessling (@manuelkiessling) <a href="https://twitter.com/manuelkiessling/status/613011983403778048">22. Juni 2015</a></blockquote>
