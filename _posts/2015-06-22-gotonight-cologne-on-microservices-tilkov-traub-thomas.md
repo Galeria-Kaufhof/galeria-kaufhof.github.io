@@ -19,8 +19,8 @@ tags: [meetup, architecture, microservices]
 On June 22, 2015, Galeria Kaufhof hosted a
 [GOTOnight community event on Microservices](http://gotocon.com/berlin-2015/freeevent/index.jsp?eventOID=7123). Over 60
 attendees listended to three great talks on the topic by [Dennis Traub](https://twitter.com/DTraub),
-[Stefan Tilkov](https://twitter.com/stilkov) and [Dave Thomas](https://twitter.com/daveathomas) and enjoyed the great
-buffet by [Dinea](http://www.dinea.de/).
+[Stefan Tilkov](https://twitter.com/stilkov) and [Dave Thomas](https://twitter.com/daveathomas), and enjoyed the great
+buffet that was provided by [Dinea](http://www.dinea.de/).
 
 The talks where followed by a panel session with all three speakers, with lots of questions from the audience and a
 lively discussion between Stefan, Dave and Dennis.
