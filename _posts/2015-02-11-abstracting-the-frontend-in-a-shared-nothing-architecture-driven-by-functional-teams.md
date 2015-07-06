@@ -17,8 +17,15 @@ About one year ago, when I joined the e-commerce team at GALERIA Kaufhof working
 
 But I realized very quickly that - from a frontend view - having five entirely separated functional teams work on things like integrating tracking solutions, affiliates or any other third-party content wasn't very efficient. Five independent frontend devs had to individually learn tracking APIs, implement tracking snippets, manage things like accounts within their own application's context. You should get the point. Sounded like the same job done multiple times by multiple people.
 
+## Wait, what's the problem again?
+If you are not a frontend developer you might wonder why we not simply embed tracking- and retargeting-pixels into the markup, just as the vendors tell us. Let me explain. Directly embedding third-party code may introduce two major problems: performance issues and script errors. You might know that all script tags in the markup are synchronously loaded and blocking the pageload by default. Although most vendors switched to asynchronously loaded tags (using the [`async` attribute](http://caniuse.com/#feat=script-async)), synchronous loading can cause enormous performance penalties if you're not aware of the problem. Additionally there is always a risk that broken third party scripts cause Javascript errors, which - in the worst case - break and halt your entire script logic.
+
+Besides the common performance issues and risk of errors, directly embedding third parties is also horribly inefficient and unscalable. Agreed - for one single developer, placing one global pixel in the head of the outmost template in his blog, such approach might be sufficient. But as soon as you start scaling, things become more and more unmaintainable. Imagine you split the application frontend among five or more teams and try to include 10 to 20 pixels. Each team needs to have a story (or at least some sort of task or ticket if you're not into SCRUM) for adding, editing or removing, every single pixel. Add project management costs on top and it quickly becomes really expensive.
+
+Even worse - having no dedicated owner for the integration of third parties means there is nobody to ensure that the technical integration is done correctly or in any way consistent among the teams. Not to mention that, in the worst case, you need a complete application deployment (involving all verticals) to update or change a single pixel. I hope this illustrates the problem.
+
 ## The "data layer approach"
-Working with tag management systems before, I got used to what I'd call the "data layer approach" pretty well. To put it simple: the website renders some kind of interesting business information (e.g. product attributes or basket contents) into its page body. Often this is done using some Javascript API. The tagmanager then takes this data and hands it over to third-party tools like analytics, affiliates or alike. A very simple example, illustrating the concept:
+Working with tag management systems before, I got used to what I'd call the "data layer approach" pretty well. To put it simple: the website renders some kind of interesting business information (e.g. product attributes or basket contents) into its page body. Often this is done using some Javascript API. The tagmanager software then takes this data and hands it over to third-party tools like analytics, affiliates or alike. A very simple example, illustrating the concept:
 
 {% highlight javascript %}
 // common example of a "data layer"
@@ -32,7 +39,7 @@ DataLayer.push({
 });
 {% endhighlight %}
  
-This technique felt ideal to approach our separation issue. Each vertical application could independently render data into the markup and some frontend logic would take the data and care for the rest. While thinking about it, we wanted to take it even one step further and do fancy things like declarative tracking, channel recognition and tag management within our own context. Appeared seriously cool.
+This technique felt ideal to approach our separation issue. Each vertical application could independently render data into the markup and some frontend logic would take the data and care for the rest (i.e. dispatching data to third parties). While thinking about it, we wanted to take it even one step further and do fancy things like declarative tracking, channel recognition and tag management within our own context. Appeared seriously cool.
 
 ## Meta tags to the rescue
 From a technical perspective things were pretty obvious. We needed some API that the application could utilize for transporting information (and later events, too) into the client space. Also it had to be completely generic and shouldn't apply any of the structural decisions (i.e. "verticals") into the API. An additional scripting API to call from within custom controllers would be nice, but not first priority.
@@ -74,7 +81,7 @@ define "gk/lib/dal/demoAffiliate", ["thirdpartylib"] (thirdpartyLib) ->
           
 {% endhighlight %}
 
-The plugin loading is based on a simple ruleset which, optionally, executes callbacks before loading a plugin. That allows for very advanced serve rule logic, which no tagmanager could offer out-of-the-box (e.g. *if the page's type is "checkout-complete",  the user is logged in and has more than 3 articles in his basket*). This even enables us to eventually replace our external tagmanager and host the entire affiliate integration right within our own git repository. If you are a developer and/or you ever worked with external tag management GUIs (or any other, less comfortable form of affiliate integration) you might know what a great relief that is. We are even able to **fully unit test our affiliate pixels, integrated within our CD pipeline**. Getting jealous? You should! ;-)    
+The plugin loading is based on a simple ruleset which, optionally, executes callbacks before loading a plugin. That allows for very advanced serve rule logic, which no tagmanager could offer out-of-the-box (e.g. *if the page's type is "checkout-complete", the user is logged in, and has more than 3 articles in his basket*). This even enables us to eventually replace our external tagmanager and host the entire affiliate integration right within our own git repository. If you are a developer and/or you ever worked with external tag management GUIs (or any other, less comfortable form of affiliate integration) you might know what a great relief that is. We are even able to **fully unit test our affiliate pixels, integrated within our CD pipeline**. Getting jealous? You should! ;-)    
 
 ## Going async
 Most modern websites don't involve a new pageload for every action. Actions like e.g. opening a layer, expanding some accordion or using the off-canvas navigation may happen anytime, asynchronously, without our DAL ever being notified. For such cases we developed the `DAL.broadcast` mechanism. It offers a simple, one-way message API that allows sending event notifications directly to the DAL. Whenever a script causes an asynchronous action that should be globally broadcasted, the `DAL.broadcast` method can be called with the specific event name and an optional information object:
@@ -119,41 +126,92 @@ Using this *declarative tracking* it was now easily possible to apply tracking l
 ## Standards and conventions ftw
 At this point you might ask: *"Yeah, sounds nice, but what's all the buzz about? This doesn't look like rocket science."* Agreed (mostly). But, that's only a small part of the cake. The majority of work went into defining conventions and standards for the various types and use cases. Which data do we have to pass to our DAL? What are the globally required fields? How do we name our pages? Which data do we need for which event and/or page? What are the more specific bits of information each vertical had to pass? 
 
-The answers to all those questions are very subjective and closely related to the field of business. Obviously, for e-commerce you have substantially different information you want to collect, compared to a content-driven online magazine. But in any case it boils down to some key metrics you want to collect and analyze for your business. E.g. a big part of the DAL's data is passed to our RUM and BI software, which are also implemented as DAL plugins. Thus, many of our own conventions and metrics are specific to this use case. Another major part is the affiliate and basket tracking integration.  
+The answers to all those questions are very subjective and closely related to the field of business. Obviously, for e-commerce you have substantially different information you want to collect, compared to a content-driven online magazine. But in any case it boils down to some key metrics you want to collect and analyze for your business. E.g. a big part of the DAL's data is passed to our RUM (Real User Monitoring) and BI (Business Intelligence) software, which are also implemented as DAL plugins. Thus, many of our own conventions and metrics are specific to this use case. Another major part is the affiliate and basket tracking integration.  
 
-Luckily, I had done most of that long time before, when I initiated the project "tagmanager integration" for our old webshop. So I  started writing down the important KPIs and metrics based on that historical data and the trackingpixels from our tracking solution and our recommendation engine. I summed it all up in a nice table in our wiki, structured the table based on verticals and added a nice description for all keys. Then I wrote the integration stories for the vertical teams so they could integrate the right metatags and declarations in the markup. Awesome.
+Luckily, I had done most of that long time before, when I initiated the project "tagmanager integration" for our old webshop. So I started writing down the important KPIs and metrics based on that historical data and the tracking-pixels from our tracking solution and our recommendation engine. I summed it all up in a nice table in our wiki, structured the table based on verticals and added a description for all keys. Then I wrote the integration stories for the vertical teams so they could integrate the right metatags and declarations in the markup. Awesome.
 
-Well, at least it felt awesome until I looked at the actual implementation done by the teams. The problem was that I haven't been very explicit in declaring the types (and especially the formatting) for the individual metrics. I simply defined something like *on the product detail page we need a product object with the following fields: name, price, category, ...*. Even though I also defined some examples, this still led to fairly diverse implementations. Especially the price formatting was a problem, because there were multiple interpretations about how a price should be expressed (e.g.`"29,90€"` vs. `29.9` which are both valid representations of the same price value).
+Well, at least it felt awesome until I looked at the actual implementation done by the teams. The problem was that I had not been very explicit in declaring the types (and especially the formatting) for the individual metrics. I simply defined something like *on the product detail page we need a product object with the following fields: name, price, category, ...*. Even though I also defined some examples, this still led to fairly diverse implementations. Especially the price formatting was a problem, because there were multiple interpretations about how a price should be expressed (e.g.`"29,90€"` vs. `29.9` which are both valid representations of the same price value).
 
 ## Typization to the rescue
-Since Javascript (and JSON, too) is a very loosely typed language, we needed to define abstract types (or interfaces if you're using [Typescript](http://typescriptlang.org)) that explicitly define how values have to be supplied to the DAL. That resulted in various fancy types, e.g. *DALPageData*, *DALUserData* or *DALProductData* to just name a few. Let's look at the type definition for the *DALPageData* type:
+Since Javascript (and JSON, too) is a very loosely typed language, we needed to define abstract types (or interfaces if you're using [Typescript](http://typescriptlang.org)) that explicitly define how values have to be supplied to the DAL. That resulted in various fancy types, e.g. *DALPageData*, *DALUserData* or *DALProductData* to just name a few. Let's look at a part of the type definition for the *DALProductData* type:
 
 {% highlight javascript %}
-// @interface IDALPageData
-DALPageData = {
+// @interface IDALProductData
+DALProductData = {
   
   /**
-   * Display name of the page, e.g. 'Homepage' (according to list in table XXX)
+   * Internal ID of this product (pr base product).
    */
-  "name" : {
+  "productId" : {
+    "type" : "String",
+    "mandatory" : true
+    }
+  },
+  
+  /**
+   * EAN (European Article Number, vgl. http://de.wikipedia.org/wiki/European_Article_Number) of this product or variant.
+   */
+  "ean" : {
     "type" : "String",
     "mandatory" : true
   },
   
   /**
-   * Unique page type for this page, e.g. 'checkout-basket'.
+   * Object with price information.
    */
-  "type" : {
-    "type" : "String",
-    "mandatory" : true
-  }
+  "priceData": {
+    "type": "DALPriceData",
+    "mandatory": true,
+    "apiVersion": 2
+  },
   
+  /* ... */
+
 }
 {% endhighlight %}
 
 As you can see we provide a JSON structure defining the type and some other, optional fields (e.g. *mandatory*, *deprecated*, *apiVersion* and some more). This way we ensure backwards compatibility throughout the API because the teams can safely adapt to new API versions without introducing breaking changes.
 
-The curious reader might ask himself: *"Hey, what's the purpose of defining these as Javascript obejcts?"* Well, within the metatags the data ist supplied as plain object literals. But in our test infrastructure (based on Selenium) we can now run over the entire page, take the above type definitions and compare them to the actual implementation. If there are mismatches, e.g. because a vertical didn't implement a type correctly, we raise an error and get a notification. Now, ain't that sweet?
+When looking at the *priceData* attribute, you might notice how we used the *DALPriceData* type to solve the previously mentioned issues with the price formatting. Also, instead of just declaring price-related attributes directly within *DALProductData*, we defined our dedicated type for generic price information that we use for products, carts, orders and anything else that might come in the future. Here is a little excerpt of the *DALPriceData* type:
+
+ {% highlight javascript %}
+// @interface IDALPriceData
+DALPriceData = {
+  
+  /**
+   * Current net price of the product or cart; *excluding* VAT, shipping oder discount.
+   */
+  "net": {
+    "type": "float",
+    "mandatory": true,
+    "apiVersion": 2
+  },
+  
+  /**
+   * VAT part of 'net' price.
+   */
+  "VAT": {
+    "type": "float",
+    "mandatory": true,
+    "apiVersion": 2
+  },
+  
+  /**
+   * Total price (= net + VAT - discount); *including* VAT and *after* subtracting discount.
+   */
+  "total": {
+    "type": "float",
+    "mandatory": true,
+    "apiVersion": 2
+  },
+  
+  /* ... */
+
+}
+{% endhighlight %}
+
+The curious reader might ask: *"Hey, what's the purpose of defining these as Javascript objects?"* Well, within the metatags the data ist supplied as plain object literals. But in our test infrastructure (based on Selenium) we can now run over the entire page, take the above type definitions and compare them to the actual implementation. If there are mismatches, e.g. because a vertical didn't implement a type correctly, we raise an error and get a notification. Now, ain't that sweet?
+
 
 
 ## Conclusion
