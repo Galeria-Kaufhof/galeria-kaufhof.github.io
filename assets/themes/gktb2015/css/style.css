@@ -277,6 +277,15 @@ ul {
   margin: 0 0 0.35rem;
 }
 
+.gk-post__content blockquote {
+  background-color: #eee;
+  padding: 1rem;
+}
+
+.gk-post__content blockquote p {
+  margin: 0;
+}
+
 /* author info */
 .gk-post__author {
   margin-bottom: 2rem;
