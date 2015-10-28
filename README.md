@@ -2,6 +2,10 @@
 
 The quickest way to start and publish your Jekyll powered blog. 100% compatible with GitHub pages
 
+## Note to Galeria Kaufhof contributors
+
+This setup currently doesn't work with Jekyll 3. Jekyll 2.5.3 is known to work: `sudo gem install jekyll -v 2.5.3`
+
 ## Usage
 
 For all usage and documentation please see: <http://jekyllbootstrap.com>
