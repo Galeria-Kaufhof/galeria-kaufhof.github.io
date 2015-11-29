@@ -23,7 +23,7 @@ Weiterhin waren hier die für den Online-Shop geltenden Skalierungsanforderungen
 
 Da die Deadline für dieses Projekt sehr knapp gesteckt war, hat man sich der technologischen Lösung sehr pragmatisch genähert. Es fiel die Entscheidung, die Anwendung mit dem PHP-basierten Symfony2 Framework und MySQL als Datenbank zu bauen. Diese Kombination ist sehr gut etabliert und hat sich als genau die richtige Wahl für diese Art von Projekt herausgestellt.
 
-Ich möchte dieses Projekt aus der realen Welt heranziehen um den Leser durch all jene Details des Produktentwicklungsprozesses zu führen, die eine relevante Rolle spielen im Zusammenhang mit den Schreiben und Betreiben von Anwendungen auf Basis von Symfony2 - hierbei gehe ich ein auf Aspekte wie Projektsetup, Testing, Datenbankmigrationen, Continuous Delivery, Sicherheit, und vieles mehr.
+Ich möchte dieses Projekt aus der realen Welt heranziehen um den Leser durch all jene Details des Produktentwicklungsprozesses zu führen, die eine relevante Rolle spielen im Zusammenhang mit dem Schreiben und Betreiben von Anwendungen auf Basis von Symfony2 - hierbei gehe ich ein auf Aspekte wie Projektsetup, Testing, Datenbankmigrationen, Continuous Delivery, Sicherheit, und vieles mehr.
 
 Der hierzu gewählte Ansatz hebt alle signifikanten Entscheidungen hervor, erklärt die Implementationsdetails die sich aus diesen Entscheidungen ergaben, und diskutiert die Vor- und Nachteile dieser Entscheidungen. Ich werde weiterhin diejenigen Teile der Anwendungen herausstellen, die weiter verbessert werden könnten.
 
