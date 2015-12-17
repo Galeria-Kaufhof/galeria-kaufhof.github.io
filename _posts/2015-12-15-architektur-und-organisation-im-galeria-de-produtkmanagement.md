@@ -28,7 +28,7 @@ Inhaltlich haben wir das Konzept SCS seit langem gelebt, aber semantisch war der
 nicht klar verortet. Mit der Überarbeitung haben nun alle zentralen Bausteine einen klaren Platz und einen klaren Namen.
 
 Bei einem Projekt, welches seit nunmehr fast 2 Jahren läuft und seit fast einem Jahr im Betriebs- und
-Weiterentwicklungsmodus ist, wird auch die Frage der fachlichen Wachstums spannend. So klar die bestehende Struktur ist
+Weiterentwicklungsmodus ist, wird auch die Frage des fachlichen Wachstums spannend. So klar die bestehende Struktur ist
 - was sind die architektonischen Leitlinien, wenn der fachliche Themenumfang wächst und die Plattform sich
 inhaltich weiterentwickelt? Schliesslich stehen wir noch am Anfang unserer Mission, MCR-Marktführer in Europa zu werden.
 
@@ -37,3 +37,39 @@ Produktentwicklungsorganisation stärker an (ohne dabei den Anspruch zu erheben,
 Galeria.de Produktentwicklung vollumfänglich aufzuzeigen - dies muss im Zuge anderer Beiträge erfolgen).
 
 
+## Die Visualisierung
+
+Einen Überblick über die verschiedenen Architekturkomponenten und ihr Verhältnis zueinander soll das folgende Schaubild
+ermöglichen:
+
+<img width="960"
+     src="{{ site.url }}/assets/images/architektur-update/Ueberblick_Architektur_GALERIA_Kaufhof_Online_Plattform.svg">
+
+Zwei Grundideen bilden das Fundament der architektonischen Strukturierung: Eine vertikale Orientierung der High-Level
+Komponenten in sogenannten Self-contained Systems, und eine fachliche Motivation für Trennung und Gruppierung dieser
+Komponenten in sogenannten Domänen.
+
+Das Verhältnis von Domänen zu Systemen ist wie folgt: eine Domäne liegt immer dann vor, wenn ein oder
+mehrere Systeme einen logisch zusammenhängenden Ausschnitt der fachlichen Use-Cases eines Benutzers vollumfänglich
+abbilden. Konkretes Beispiel: die Domäne SEARCH bei Galeria.de umfasst diejenigen Systeme, welche von der
+Benutzeroberfläche bis zur Datenhaltung das Suchen und Finden von Produkten für den Benutzer von galeria.de ermöglichen.
+
+Der Domäne SEARCH ist also mindestens ein System zugeordnet, welches sowohl die Weboberflächen-Elemente (wie Suchbox mit
+Auto-Complete, Suchergebnisseite usw.) bereitstellt, als auch den Import von Produktdaten und deren Überführung in eine
+spezialisierte Such-Datenbank implementiert.
+
+Warum dann noch die Unterscheidung zwischen Domäne und System? Warum nicht 1 Domäne gleich 1 System? Die Motivation
+hierfür ist, dass ein Komponentenschnitt einerseits fachlich motiviert sein kann, andererseits technisch.
+
+
+
+
+In gewissem Sinne wird hier das bekannte Paradigma von loser Kopplung und hoher Kohäsion, welches klassischerweise auf
+Ebene eines Softwaresystems betrachtet wird, auf einer höheren Ebene fortgesetzt.
+
+Die Kohäsion entsteht, weil fachlich verwandte Themen vereint werden in den Self-contained Systems einer Domäne. Die
+lose Kopplung wird abgebildet dadurch, dass die verschiedenen Systeme nur über Schnittstellen miteinander kommunizieren.
+
+Damit gilt für das Gesamtsystem dieselbe Eigenschaft, die auch innerhalb eines Softwaresystems gilt, welches nach diesem
+Paradigma entworfen wurde: Änderungen in einer Komponente bedingen nur dann Änderungen in einer anderen Komponente,
+wenn die Änderungen die Schnittstelle betreffen.
