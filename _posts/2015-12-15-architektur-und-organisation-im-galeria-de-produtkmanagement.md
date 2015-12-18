@@ -54,15 +54,12 @@ mehrere Systeme einen logisch zusammenhängenden Ausschnitt der fachlichen Use-C
 abbilden. Konkretes Beispiel: die Domäne SEARCH bei Galeria.de umfasst diejenigen Systeme, welche von der
 Benutzeroberfläche bis zur Datenhaltung das Suchen und Finden von Produkten für den Benutzer von galeria.de ermöglichen.
 
-Der Domäne SEARCH ist also mindestens ein System zugeordnet, welches sowohl die Weboberflächen-Elemente (wie Suchbox mit
-Auto-Complete, Suchergebnisseite usw.) bereitstellt, als auch den Import von Produktdaten und deren Überführung in eine
-spezialisierte Such-Datenbank implementiert.
+Der Domäne SEARCH ist also mindestens ein System zugeordnet, welches sowohl die Weboberflächen-Elemente (wie zum
+Beispiel die Suchbox mit Auto-Complete, Suchergebnisseite usw.) bereitstellt, als auch den Import von Produktdaten und
+deren Überführung in eine spezialisierte Such-Datenbank implementiert.
 
-Warum dann noch die Unterscheidung zwischen Domäne und System? Warum nicht 1 Domäne gleich 1 System? Die Motivation
-hierfür ist, dass ein Komponentenschnitt einerseits fachlich motiviert sein kann, andererseits technisch.
-
-
-
+Untereinander sprechen diese Systeme - innerhalb einer Domänengrenze und darüber hinaus - nur über definierte
+Schnittstellen miteinander, unter Vermeidung von verteilten Callstacks.
 
 In gewissem Sinne wird hier das bekannte Paradigma von loser Kopplung und hoher Kohäsion, welches klassischerweise auf
 Ebene eines Softwaresystems betrachtet wird, auf einer höheren Ebene fortgesetzt.
@@ -73,3 +70,22 @@ lose Kopplung wird abgebildet dadurch, dass die verschiedenen Systeme nur über 
 Damit gilt für das Gesamtsystem dieselbe Eigenschaft, die auch innerhalb eines Softwaresystems gilt, welches nach diesem
 Paradigma entworfen wurde: Änderungen in einer Komponente bedingen nur dann Änderungen in einer anderen Komponente,
 wenn die Änderungen die Schnittstelle betreffen.
+
+Dies sorgt für hohe Robustheit des Gesamtsystems (ohne verteilte Callstacks können andere Systeme weiter operieren, auch
+wenn ein angebundenes System nicht-verfügbar wird), ermöglicht weitgehend autarkes Arbeiten pro Domäne (nicht zuletzt in
+Hinblick auf die Releasefrequenz), bietet die Möglichkeit, Systeme unterschiedlich nach ihren unterschiedlichen
+Anforderungen zu skalieren, und erlaubt eine in Hinblick auf die erforderliche Funktionalität passgenaue Wahl der
+Technologien pro System. Weitere Informationen hierzu liefert scs-architecture.org.
+
+
+Das Konzept der Domäne ist weiterhin der Brückenschlag zwischen Architektur und Aufbauorganisation. Optimalerweise steht
+hinter jeder Domäne ein Team - in unserem Fall ein Scrum-Team - welches von Anforderungsmanagent über
+Software-Entwicklung und QA bis hin zum Betrieb die Domäne mit ihren Systemen fachlich und technisch vollumfänglich
+"owned".
+
+Warum dann noch die Unterscheidung zwischen Domäne und System? Warum nicht 1 Domäne gleich 1 System? An dieser Stelle
+findet derzeit eine Evolution unseres bisherigen Modells statt, in dem die Begriffe bisher deckungsgleich verwendet
+wurden.
+
+Die Motivation für eine Unterscheidung ist, dass ein Komponentenschnitt einerseits fachlich motiviert sein kann,
+andererseits technisch.
