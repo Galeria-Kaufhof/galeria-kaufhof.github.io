@@ -32,7 +32,7 @@ Weiterentwicklungsmodus ist, wird auch die Frage des fachlichen Wachstums spanne
 - was sind die architektonischen Leitlinien, wenn der fachliche Themenumfang wächst und die Plattform sich
 inhaltich weiterentwickelt? Schliesslich stehen wir noch am Anfang unserer Mission, MCR-Marktführer in Europa zu werden.
 
-Zusätzlich klingt in diesem Dokument auch das Verhältnis zwischen Produkt-Architektur und
+Zusätzlich klingt in diesem Dokument auch das Verhältnis zwischen Produktarchitektur und
 Produktentwicklungsorganisation stärker an (ohne dabei den Anspruch zu erheben, die Aufbau- und Ablauforganisation der
 Galeria.de Produktentwicklung vollumfänglich aufzuzeigen - dies muss im Zuge anderer Beiträge erfolgen).
 
@@ -55,7 +55,7 @@ Komponenten in sogenannten Domänen.
 Das Verhältnis von Domänen zu Systemen ist wie folgt: eine Domäne liegt immer dann vor, wenn ein oder
 mehrere Systeme einen logisch zusammenhängenden Ausschnitt der fachlichen Use-Cases eines Benutzers vollumfänglich
 abbilden. Konkretes Beispiel: die Domäne SEARCH bei Galeria.de umfasst diejenigen Systeme, welche von der
-Benutzeroberfläche bis zur Datenhaltung das Suchen und Finden von Produkten für den Benutzer von galeria.de ermöglichen.
+Benutzeroberfläche bis zur Datenhaltung das Suchen und Finden von Produkten für den Benutzer von Galeria.de ermöglichen.
 
 Der Domäne SEARCH ist also mindestens ein System zugeordnet, welches sowohl die Weboberflächen-Elemente (wie zum
 Beispiel die Suchbox mit Auto-Complete, Suchergebnisseite usw.) bereitstellt, als auch den Import von Produktdaten und
@@ -70,7 +70,7 @@ Microservice-basierten Struktur entwickelt hat und als gemeinsame Datenhaltung u
 MessageBus-orientierten Ansatz verfolgt.
 
 Miteinander sprechen diese Systeme - innerhalb einer Domänengrenze und darüber hinaus - nur über definierte
-Schnittstellen (da sie ja keine Daten teilen dürfen), und dies unter Vermeidung von verteilten Callstacks.
+Schnittstellen (da sie keine Daten teilen dürfen), und dies unter Vermeidung von verteilten Callstacks.
 
 In gewissem Sinne wird hier das bekannte Paradigma von loser Kopplung und hoher Kohäsion, welches klassischerweise auf
 Ebene eines einzelnen Softwaresystems betrachtet wird, auf einer höheren Ebene fortgesetzt.
@@ -98,7 +98,7 @@ Software-Entwicklung und QA bis hin zum Betrieb die Domäne mit ihren Systemen f
 ## Domänen und ihre Systeme
 
 Warum dann noch die Unterscheidung zwischen Domäne und System? Warum nicht 1 Domäne gleich 1 System? An dieser Stelle
-findet derzeit eine Evolution unseres bisherigen Modells statt, in dem die Begriffe bisher deckungsgleich verwendet
+findet derzeit eine Evolution unseres bisherigen Modells statt, in dem die Begriffe bisher oft synonym verwendet
 wurden.
 
 Die Grund für eine Unterscheidung ist, dass ein Komponentenschnitt einerseits fachlich motiviert sein kann, andererseits
@@ -110,7 +110,7 @@ zu wollen oder feingranularer releasen zu wollen.
 
 Für beide Motivationen gibt es derzeit Beispiele im Projekt. Das Team der bestehenden Domäne EXPLORE, welches sich
 bisher vornehmlich um Teaser und Störer im Shop kümmert, soll in Zukunft die Verantwortung übernehmen für die
-Infrastruktur von Inhalten auf galeria.de, die nicht direkt mit dem Shopping-Erlebnis des Kunden zu tun haben,
+Infrastruktur von Inhalten auf Galeria.de, die nicht direkt mit dem Shopping-Erlebnis des Kunden zu tun haben,
 beispielsweise Presseseiten und Unternehmensinformationen sowie Inhalte rund um das Recruiting.
 
 Abgesehen davon, dass hier auf Basis eines Open Source CMS auch technisch eine neue Lösung entsteht, wird schnell klar,
@@ -175,3 +175,13 @@ Wir unterscheiden hierbei 4 Typen von Schnittstellen:
 * Typ "Other"
   * Schnittstellen, die nicht den anderen Typen entsprechen: FTP, SOAP, usw. Unterschiedlichste Transportprotokolle und
     Medientypen sind denkbar.
+
+
+## Zusammenfassung
+
+Der Architekturansatz von vertikal orientierten Self-contained Systems gepaart mit fachlich geschnittenen Domänen und
+HTTP-basierten Schnittstellen bildet den Rahmen für alle Produktentwicklungsinitiativen von Galeria.de.
+
+Dieser Rahmen ermöglicht optimale Kundenorientierung durch fachliche Spezialisierung in den Domänenteams, ein robustes
+Gesamtprodukt dank der Entkopplung von Datenhaltung und Callstacks, und eine effektive Weiterentwicklung dank autarker
+Releaseprozesse und einem auf die Schnittstellen beschränkten Abstimmungsprozess in den Softwareentwicklungsteams.
