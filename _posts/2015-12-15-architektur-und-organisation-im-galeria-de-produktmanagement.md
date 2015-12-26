@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "Die Architektur der Galeria.de Plattform im Kontext der Produktentwicklungsorganisation"
-description: "Dieser Artikel erläutert die architektonischen Rahmenbedingungen, die der Arbeit in der
-              Softwareentwicklung für das im Galeria.de Produktmanagement ihre Orientierung geben."
+description: "Dieser Artikel erläutert die architektonischen Rahmenbedingungen für die Arbeit in der
+              Softwareentwicklung des Galeria.de Produktmanagements."
 category: general
 author: manuelkiessling
 tags: [scs, self-contained services, architecture, interfaces]
