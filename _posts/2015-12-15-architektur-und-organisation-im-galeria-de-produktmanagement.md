@@ -61,11 +61,19 @@ Der Domäne SEARCH ist also mindestens ein System zugeordnet, welches sowohl die
 Beispiel die Suchbox mit Auto-Complete, Suchergebnisseite usw.) bereitstellt, als auch den Import von Produktdaten und
 deren Überführung in eine spezialisierte Such-Datenbank implementiert.
 
-Untereinander sprechen diese Systeme - innerhalb einer Domänengrenze und darüber hinaus - nur über definierte
-Schnittstellen miteinander, unter Vermeidung von verteilten Callstacks.
+Ein System wiederum ist eine Sammlung von Anwendungen mit gemeinsamer Datenhaltung, welche in unserem Fall auch alle
+innerhalb desselben Code Repositories liegen und auch gemeinsam deployed werden - bei einer Scala Domäne könnte es sich
+also konkret um ein [sbt Multiprojekt](http://www.scala-sbt.org/0.13/tutorial/Multi-Project.html) bestehend aus einer
+Play2 Anwendung für das Webinterface und zusätzlich Anwendungen auf Basis von Akka für die Hintergrundverarbeitung von
+Daten handeln. Und unsere Ruby Domäne CONTROL wiederum betreibt ein System, welches sich intern stark in Richtung einer
+Microservice-basierten Struktur entwickelt hat und als gemeinsame Datenhaltung unter anderem einen
+MessageBus-orientierten Ansatz verfolgt.
+
+Miteinander sprechen diese Systeme - innerhalb einer Domänengrenze und darüber hinaus - nur über definierte
+Schnittstellen (da sie ja keine Daten teilen dürfen), und dies unter Vermeidung von verteilten Callstacks.
 
 In gewissem Sinne wird hier das bekannte Paradigma von loser Kopplung und hoher Kohäsion, welches klassischerweise auf
-Ebene eines Softwaresystems betrachtet wird, auf einer höheren Ebene fortgesetzt.
+Ebene eines einzelnen Softwaresystems betrachtet wird, auf einer höheren Ebene fortgesetzt.
 
 Die Kohäsion entsteht, weil fachlich verwandte Themen vereint werden in den Self-contained Systems einer Domäne. Die
 lose Kopplung wird abgebildet dadurch, dass die verschiedenen Systeme nur über Schnittstellen miteinander kommunizieren.
@@ -74,11 +82,12 @@ Damit gilt für das Gesamtsystem dieselbe Eigenschaft, die auch innerhalb eines 
 Paradigma entworfen wurde: Änderungen in einer Komponente bedingen nur dann Änderungen in einer anderen Komponente,
 wenn die Änderungen die Schnittstelle betreffen.
 
-Dies sorgt für hohe Robustheit des Gesamtsystems (ohne verteilte Callstacks können andere Systeme weiter operieren, auch
-wenn ein angebundenes System nicht-verfügbar wird), ermöglicht weitgehend autarkes Arbeiten pro Domäne (nicht zuletzt in
-Hinblick auf die Releasefrequenz), bietet die Möglichkeit, Systeme nach ihren unterschiedlichen Anforderungen auch
-unterschiedlich zu skalieren, und erlaubt eine in Hinblick auf die erforderliche Funktionalität passgenaue Wahl der
-Technologien pro System. Weitere Informationen hierzu liefert [scs-architecture.org](http://scs-architecture.org).
+Dies sorgt für hohe Robustheit des Gesamtsystems (ohne verteilte Callstacks und dank Replikation von Daten können andere
+Systeme weiter operieren, auch wenn ein angebundenes System nicht-verfügbar wird), ermöglicht weitgehend autarkes
+Arbeiten pro Domäne (nicht zuletzt in Hinblick auf die Releasefrequenz), bietet die Möglichkeit, Systeme nach ihren
+unterschiedlichen Anforderungen auch unterschiedlich zu skalieren, und erlaubt eine in Hinblick auf die erforderliche
+Funktionalität passgenaue Wahl der Technologien pro System. Weitere Informationen hierzu liefert
+[scs-architecture.org](http://scs-architecture.org).
 
 Das Konzept der Domäne ist weiterhin der Brückenschlag zwischen Architektur und Aufbauorganisation. Optimalerweise steht
 hinter jeder Domäne ein Team - in unserem Fall ein Scrum-Team - welches von Anforderungsmanagent über
@@ -96,8 +105,8 @@ Die Grund für eine Unterscheidung ist, dass ein Komponentenschnitt einerseits f
 technisch. Eine rein technische Motivation führt hierbei zu einem neuen System, eine fachliche Motivation zu einer neuen
 Domäne. Der Begriff der "technischen Motivation" ist allerdings recht weit gefasst - es muss nicht zwangsläufig die
 Einführung einer neuen Technologie (Programmiersprache, Framework, Datenbanksystem usw.) vorliegen: selbst bei
-gleichbleibendem Stack kann es die technische Motivation geben, eine weiterhin saubere Codebase gewährleisten zu wollen
-oder feingranularer releasen zu wollen.
+gleichbleibendem Technologiestack kann es die technische Motivation geben, eine weiterhin saubere Codebase gewährleisten
+zu wollen oder feingranularer releasen zu wollen.
 
 Für beide Motivationen gibt es derzeit Beispiele im Projekt. Das Team der bestehenden Domäne EXPLORE, welches sich
 bisher vornehmlich um Teaser und Störer im Shop kümmert, soll in Zukunft die Verantwortung übernehmen für die
@@ -134,3 +143,35 @@ organisatorisch außerhalb der Kontrolle von Galeria.de liegt.
 
 ## Schnittstellen
 
+Der Verzicht auf eine gemeinsame Datenhaltung bedingt klar definierte und zuverlässig arbeitende Schnittstellen.
+Leitbild ist für uns das World Wide Web, weshalb wir auf HTTP als Transportprotokoll setzen und unsere Schnittstellen
+nach den Prinzipien von REST gestalten.
+
+Wir unterscheiden hierbei 4 Typen von Schnittstellen:
+
+* Typ "Web"
+  * baut auf HTTP auf
+  * RESTful
+  * HATEOASful
+  * benutzerorientierter Media-Type
+  * klassischerweise die von einer Backend-Anwendung generierte, HTML-basierte Webseite (oder Webseiten-Elemente, welche
+    durch die Frontend-Integration per SSI eingebunden werden)
+
+* Typ "REST"
+  * baut auf HTTP auf
+  * RESTful
+  * HATEOASful
+  * maschinenorientierter Media-Type
+  * klassischerweise der durch eine Backend-Anwendung bereitgestellte JSON-Webservice, welcher von JavaScript
+    Anwendungen, Mobile Apps, oder Fremdanwendungen genutzt wird
+
+* Typ "Multipart"
+  * baut auf HTTP auf
+  * RESTful
+  * maschinenorientierter Media-Type
+  * Auf HTTP multipart basierende Feed- oder Snapshot-Schnittstelle für die Synchronisation von Massendaten und für
+    Event-Sourcing
+
+* Typ "Other"
+  * Schnittstellen, die nicht den anderen Typen entsprechen: FTP, SOAP, usw. Unterschiedlichste Transportprotokolle und
+    Medientypen sind denkbar.
