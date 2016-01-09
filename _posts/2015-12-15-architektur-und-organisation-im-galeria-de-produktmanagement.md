@@ -49,7 +49,7 @@ ermöglichen:
 ## Grundlagen der Architektur
 
 Zwei Grundideen bilden das Fundament der architektonischen Strukturierung: Eine vertikale Orientierung der High-Level
-Komponenten in sogenannten Self-contained Systems, und eine fachliche motivierte Trennung und Gruppierung dieser
+Komponenten in sogenannten Self-contained Systems, und eine fachlich motivierte Trennung und Gruppierung dieser
 Komponenten in sogenannten Domänen.
 
 Das Verhältnis von Domänen zu Systemen ist wie folgt: eine Domäne liegt immer dann vor, wenn ein oder
