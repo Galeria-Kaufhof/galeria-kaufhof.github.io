@@ -21,7 +21,7 @@ gesteckt hat und das Projekt in Hinblick auf Fragen der System- und Softwarearch
 In den vergangenen Tagen haben wir begonnen, ausgehend von den Erfahrungen bis heute und unserer jetzigen Perspektive,
 einige der Grundlagen unserer Architektur noch einmal neu aufzuschreiben.
 
-Anstoß hierzu lieferte unter anderem der Launch von http://scs-architecture.org/, einem (noch überschaubaren) Portal,
+Anstoß hierzu lieferte unter anderem der Launch von [http://scs-architecture.org/](http://scs-architecture.org/), einem Portal,
 welches das Konzept der Self-contained Systems, die den zentralen Baustein auch unserer Architektur bilden, präsentiert.
 
 Inhaltlich haben wir das Konzept SCS seit langem gelebt, aber semantisch war der Ansatz auf unserer Architekturlandkarte
