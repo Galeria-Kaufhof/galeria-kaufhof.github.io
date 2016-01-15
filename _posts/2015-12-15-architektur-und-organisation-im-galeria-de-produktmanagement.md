@@ -21,7 +21,7 @@ gesteckt hat und das Projekt in Hinblick auf Fragen der System- und Softwarearch
 In den vergangenen Tagen haben wir begonnen, ausgehend von den Erfahrungen bis heute und unserer jetzigen Perspektive,
 einige der Grundlagen unserer Architektur noch einmal neu aufzuschreiben.
 
-Anstoß hierzu lieferte unter anderem der Launch von http://scs-architecture.org/, einem (noch überschaubaren) Portal,
+Anstoß hierzu lieferte unter anderem der Launch von [http://scs-architecture.org/](http://scs-architecture.org/), einem Portal,
 welches das Konzept der Self-contained Systems, die den zentralen Baustein auch unserer Architektur bilden, präsentiert.
 
 Inhaltlich haben wir das Konzept SCS seit langem gelebt, aber semantisch war der Ansatz auf unserer Architekturlandkarte
@@ -49,7 +49,7 @@ ermöglichen:
 ## Grundlagen der Architektur
 
 Zwei Grundideen bilden das Fundament der architektonischen Strukturierung: Eine vertikale Orientierung der High-Level
-Komponenten in sogenannten Self-contained Systems, und eine fachliche motivierte Trennung und Gruppierung dieser
+Komponenten in sogenannten Self-contained Systems, und eine fachlich motivierte Trennung und Gruppierung dieser
 Komponenten in sogenannten Domänen.
 
 Das Verhältnis von Domänen zu Systemen ist wie folgt: eine Domäne liegt immer dann vor, wenn ein oder
