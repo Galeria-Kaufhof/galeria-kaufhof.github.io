@@ -14,7 +14,7 @@ tags: [scala, play2, cassandra]
 <a href="https://www.playframework.com/documentation/2.4.x/Home">Play 2.4</a> supports <a href="https://www.playframework.com/documentation/2.4.x/ScalaCompileTimeDependencyInjection">Compile Time Dependency Injection</a>. This post describes how to inject your own Cassandra repository object into a controller at compile time, while also initializing and closing a Cassandra connection session during application startup and shutdown, respectively.
 </p>
 <p>
-The code of the final application is available at <a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di">https://github.com/manuelkiessling/play2-compiletime-cassandra-di</a>.
+The code of the final application is available at <a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di">https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di</a>.
 </p>
 
 <h2>The goal</h2>
@@ -50,7 +50,7 @@ We can then use Activator to set up the Play2 project: <code class="inline">acti
 The first thing to do now is to switch from specs2 to ScalaTest as our testing framework, as described in <a href="http://manuel.kiessling.net/2015/12/31/play2-switching-from-specs2-to-scalatest">Play2: Switching from specs2 to ScalaTest</a>. Please change files <code class="inline">build.sbt</code>, <code class="inline">test/ApplicationSpec.scala</code>, and <code class="inline">test/IntegrationSpec.scala</code> as described there.
 </p>
 <p>
-Running <code class="inline">sbt test</code> afterwards should just work. At this point, your codebase should look like <a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/tree/3a96b61cf4445d80e3563e66d6e319c80eb8afc4">the reference repository at 3a96b61</a>.
+Running <code class="inline">sbt test</code> afterwards should just work. At this point, your codebase should look like <a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/tree/3a96b61cf4445d80e3563e66d6e319c80eb8afc4">the reference repository at 3a96b61</a>.
 </p>
 
 <h2>Introducing the Cassandra driver</h2>
@@ -58,7 +58,7 @@ Running <code class="inline">sbt test</code> afterwards should just work. At thi
 We are now going to integrate the <a href="https://github.com/datastax/java-driver">Datastax Java Driver for Apache Cassandra</a>, roughly following the steps outlined in [Setting up a Scala sbt multi-project with Cassandra connectivity and migrations]({% post_url 2015-01-14-setting-up-a-scala-sbt-multi-project-with-cassandra-connectivity-and-migrations %}) (but without tests and the migrations stuff to keep the codebase small for this post).
 
 <p>
-This means adding the Cassandra driver as a dependency to file <code class="inline">build.sbt</code>, creating a utility class for connection URIs in file <code class="inline">app/cassandra/CassandraConnectionUri.scala</code>, and adding an object that handles database connections in file <code class="inline">app/cassandra/CassandraConnector.scala</code>. See <a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/tree/0fa30e4874b1398f1557dbddd2346393d15c41e3">the resulting codebase on GitHub at 0fa30e4</a> or view <a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/commit/0fa30e4874b1398f1557dbddd2346393d15c41e3?diff=split">the differences from the previous version of the codebase</a>.
+This means adding the Cassandra driver as a dependency to file <code class="inline">build.sbt</code>, creating a utility class for connection URIs in file <code class="inline">app/cassandra/CassandraConnectionUri.scala</code>, and adding an object that handles database connections in file <code class="inline">app/cassandra/CassandraConnector.scala</code>. See <a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/tree/0fa30e4874b1398f1557dbddd2346393d15c41e3">the resulting codebase on GitHub at 0fa30e4</a> or view <a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/commit/0fa30e4874b1398f1557dbddd2346393d15c41e3?diff=split">the differences from the previous version of the codebase</a>.
 </p>
 
 <h2></h2>
@@ -153,7 +153,7 @@ class Application(productsRepository: Repository[ProductModel, Int]) extends Con
 </p>
 
 <p>
-At this point (<a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/tree/d58d681c07b9aec98a96a568b7d2a8f48b6954ab">commit d58d681 in the repo</a>, <a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/commit/d58d681c07b9aec98a96a568b7d2a8f48b6954ab?diff=split">diff</a>), the application can no longer run and the existing test cases fail, because we have not yet implemented the mechanisms needed to actually inject the declared dependency into the controller. We will fix this later - first, we write a generic Cassandra repository implementation and use it to create a concrete implementation for the <code class="inline">Repository[ProductModel, Int]</code> type.
+At this point (<a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/tree/d58d681c07b9aec98a96a568b7d2a8f48b6954ab">commit d58d681 in the repo</a>, <a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/commit/d58d681c07b9aec98a96a568b7d2a8f48b6954ab?diff=split">diff</a>), the application can no longer run and the existing test cases fail, because we have not yet implemented the mechanisms needed to actually inject the declared dependency into the controller. We will fix this later - first, we write a generic Cassandra repository implementation and use it to create a concrete implementation for the <code class="inline">Repository[ProductModel, Int]</code> type.
 </p>
 
 <p>
@@ -220,7 +220,7 @@ class ProductsRepository(session: Session)
 </p>
 
 <p>
-With these changes in place (<a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/tree/cb7a9b48c470f277e86b21b80a7f7ca540335981">commit cb7a9b4 in the repo</a>, <a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/commit/cb7a9b48c470f277e86b21b80a7f7ca540335981?diff=split">diff</a>), we can approach the injection. How can we control the way the <code class="inline">Application</code> controller is created, i.e. how can we control compile time dependency injection? In Play 2.4, this happens by providing a class that extends the <code class="inline">play.api.ApplicationLoader</code> trait.
+With these changes in place (<a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/tree/cb7a9b48c470f277e86b21b80a7f7ca540335981">commit cb7a9b4 in the repo</a>, <a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/commit/cb7a9b48c470f277e86b21b80a7f7ca540335981?diff=split">diff</a>), we can approach the injection. How can we control the way the <code class="inline">Application</code> controller is created, i.e. how can we control compile time dependency injection? In Play 2.4, this happens by providing a class that extends the <code class="inline">play.api.ApplicationLoader</code> trait.
 </p>
 
 <p>
@@ -303,7 +303,7 @@ As you can see, this approach also allows to adapt to the application environmen
 </p>
 
 <p>
-At this point (<a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/tree/4e707cb784e7adbc7c8204f033404690986c9448">commit 4e707cb</a>, <a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/commit/4e707cb784e7adbc7c8204f033404690986c9448?diff=split">diff</a>, dependency injection is in place and the application is runnable again.
+At this point (<a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/tree/4e707cb784e7adbc7c8204f033404690986c9448">commit 4e707cb</a>, <a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/commit/4e707cb784e7adbc7c8204f033404690986c9448?diff=split">diff</a>, dependency injection is in place and the application is runnable again.
 </p>
 
 <p>
@@ -445,5 +445,5 @@ class Application(productsRepository: Repository[ProductModel, Int]) extends Con
 </p>
 
 <p>
-And that's it. At <a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/tree/796b6c64ea88a160481069261e1474ec36103072">commit 796b6c6</a>, (see <a href="https://github.com/manuelkiessling/play2-compiletime-cassandra-di/commit/796b6c64ea88a160481069261e1474ec36103072?diff=split">the diff</a>), we have a working Play 2.4 app with a compile time injected Cassandra repository.
+And that's it. At <a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/tree/796b6c64ea88a160481069261e1474ec36103072">commit 796b6c6</a>, (see <a href="https://github.com/Galeria-Kaufhof/play2-compiletime-cassandra-di/commit/796b6c64ea88a160481069261e1474ec36103072?diff=split">the diff</a>), we have a working Play 2.4 app with a compile time injected Cassandra repository.
 </p>
