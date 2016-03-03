@@ -10,7 +10,7 @@ This setup currently doesn't work with Jekyll 3. Jekyll 2.5.3 is known to work: 
 
 For all usage and documentation please see: <http://jekyllbootstrap.com>
 
-To start a local server, run `jekyll _2.5.3_ --serve`
+To start a local server, run `jekyll _2.5.3_ serve`
 
 ## Version
 

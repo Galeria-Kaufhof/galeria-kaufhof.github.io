@@ -47,8 +47,12 @@ When we insert a row into this table as follows:
 
     INSERT INTO users (username, firstname, lastname) VALUES ('jdoe', 'John', 'Doe');
 
-the following happens network-wise. Because `username` is the first (and in this case only) part of the primary key, it
-acts as the partition key. The value of the partition key column is used by the cluster to determine the node onto which
-to store the row. To do so, a hash function - the so-called partitioner - is applied on the value, and the result is a
-token. This token then tells the cluster about the target node, because each node is responsible for a certain range of
-nodes. Assumed that tokens would run from 0 to 49, 
+then the following happens network-wise. Because `username` is the first (and in this case only) part of the primary
+key, it acts as the partition key. The value of the partition key column is used by the cluster to determine the node
+onto which to store the row. To do so, a hash function - the so-called partitioner - is applied on the value, and the
+result is a token. This token then tells the cluster about the target node, because each node is responsible for a
+certain range of tokens. Assumed that tokens would run from 0 to 49, we can visualize the tokens-to-node mapping as
+follows:
+
+<img width="100%"
+     src="{{ site.url }}/assets/images/cassandra/Cassandra cluster with tokens.svg">
