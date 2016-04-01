@@ -9,15 +9,16 @@ tags: [cassandra]
 ---
 {% include JB/setup %}
 
-<h2>About</h2>
+## About
 At Galeria.de, we learned the hard way that it's critical to understand the inner workings of distributed
 masterless database Cassandra if you want to experience good performance during reads and writes. This post describes
 how Cassandra works under the hood, and shows how understanding these details helps to anticipate which use patterns
 work well and which don't.
 
-<h2>Network and node storage architecture</h2>
 
-<h3>The network</h3>
+## Network and node storage architecture
+
+### The network
 
 A production Cassandra setup always consists of multiple nodes, where a node is one Cassandra server process on one
 system. All nodes are connected via the network. There isn't any kind of "master" node - all nodes are created equal.
@@ -98,7 +99,7 @@ As said, the replica order is based on the logical structure of the cluster - th
 structure, where each node has a "neighbour" node that comes "after" it in the ring.
 
 
-<h3>The node storage</h3>
+### The node storage
 
 Let's "zoom in" on our node 2 and have a look at what happens in terms of its local storage when it receives the write
 request from the coordinator node as a result of the INSERT query issued by the client. As noted, the same operations
@@ -119,6 +120,23 @@ client. This means
 
 Next in line is the so-called Memtable. It is an in-memory write-back cache of rows that are regularly flushed into an
 SSTable whenever the Memtable reaches a certain size (at which point it is considered "full").
+
+
+### Performance of Cassandra operations
+
+Musings about the performance of a Cassandra operation boil down to two questions: How much will the coordinator node
+have to do in terms of network I/O, and how much work will a participating data node have to do in terms of disk I/O?
+
+The fastest operations are those for which the coordinator has to talk to only one data node, and where the approached
+data node can find the requested information by searching through as little SSTables as possible. An expensive
+operation is one where the coordinator node has to talk to all nodes on the cluster (possibly multiple times), and where
+each of the nodes has to scan through all its SSTables to retrieve the requested information.
+
+
+
+
+
+
 
 https://wiki.apache.org/cassandra/Durability
 https://wiki.apache.org/cassandra/ArchitectureCommitLog
