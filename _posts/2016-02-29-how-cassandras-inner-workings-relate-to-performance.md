@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Apache Cassandra: Its inner workings, and how this relates to performance"
+title: "How Cassandra's inner workings relate to performance"
 description: "At Galeria.de, we learned the hard way that it's critical to understand the inner workings of the
 distributed masterless database Cassandra if one wants to experience good performance. Here are some of our takeaways."
 category: tutorials
