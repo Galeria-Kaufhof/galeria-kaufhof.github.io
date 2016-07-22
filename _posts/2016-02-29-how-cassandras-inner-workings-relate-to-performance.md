@@ -367,7 +367,7 @@ is two rows, the red towel and the red jacket.
 
 The second one looks simple: All we need is one row.
 
-But in fact, the seconds query is about 10x as complex as the second one when it comes to query execution. We can even
+But in fact, the second query is about 10x as complex as the first one when it comes to query execution. We can even
 visualize this. Here is a screenshot showing the output of the statement trace for both queries (you get the tracing
 output for all following queries by issueing `TRACING ON` on the CQL shell). The statement trace lists all network and
 disk operations that need to be run in order to satisfy the query. I've taken screenshots of both text outputs, pasted
