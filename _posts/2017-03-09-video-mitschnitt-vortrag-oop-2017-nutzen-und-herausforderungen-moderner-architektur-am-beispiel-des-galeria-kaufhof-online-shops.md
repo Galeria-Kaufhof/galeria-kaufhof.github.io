@@ -14,7 +14,7 @@ tags: [scs, self-contained services, architecture, interfaces, video, talk]
 </p>
 
 <center>
-<iframe width="420" height="315" src=" https://www.youtube.com/embed/BBn9VsXhIyE" frameborder="0" allowfullscreen></iframe>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/BBn9VsXhIyE" frameborder="0" allowfullscreen></iframe>
 </center>
 
 <br clear="all">
