@@ -18,7 +18,7 @@ tags: [video, talk, scala, meetup]
 </p>
 
 <center>
-<iframe width="420" height="315" src="https://www.youtube.com/watch?v=xkVjuNGQ_NI" frameborder="0" allowfullscreen></iframe>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/xkVjuNGQ_NI" frameborder="0" allowfullscreen></iframe>
 </center>
 
 <br clear="all">
