@@ -6,7 +6,6 @@ category: tutorials
 author: manuelkiessling
 tags: [scala, sbt, cassandra, migrations, pillar, assembly]
 ---
-{% include JB/setup %}
 
 *I have learned the following through the great support and advice of my coworkers Jens Müller and
 [Martin Grotzke](https://twitter.com/martin_grotzke).*

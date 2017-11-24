@@ -7,8 +7,6 @@ category: general
 author: manuelkiessling
 tags: [video, interface development, product owner]
 ---
-{% include JB/setup %}
-
 
 Gemeinsam mit dem GALERIA Kaufhof Personalmarketing sind die folgenden vier Videos entstanden, die die Arbeitswelt in IT
 und Produktmanagement bei Galeria.de präsentieren und Einblick geben in unsere Organisation und Kultur.

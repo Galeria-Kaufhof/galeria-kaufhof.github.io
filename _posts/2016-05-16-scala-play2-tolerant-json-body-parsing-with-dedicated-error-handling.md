@@ -6,8 +6,6 @@ category: tutorials
 author: manuelkiessling
 tags: [scala, play2, json]
 ---
-{% include JB/setup %}
-
 
 <p>
 I'm currently rewriting a Scala Play2 based web service that employs the following body parser:

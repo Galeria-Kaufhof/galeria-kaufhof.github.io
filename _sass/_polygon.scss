@@ -1,0 +1,83 @@
+@mixin cells ($numberCells, $hight, $width) {
+  @for $c from 0 through $numberCells - 1 {
+    .gk-polygon-grid--c-#{$c} {
+      left: #{$c * (($width - 6)/2)}px;
+    }
+    .gk-polygon-grid--r-#{$c} {
+      top: #{$c * (($hight + 3)/2)}px;
+    }
+  }
+}
+
+@mixin polygonGrid ($baseHight, $baseWidth) {
+  &.gk-polygon-grid--w#{$baseWidth}.gk-polygon-grid--h#{$baseHight} {
+    @include cells(40, $baseHight, $baseWidth);
+  }
+}
+
+.gk {
+  &-polygon {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 38px;
+    height: 33px;
+
+    &--small {
+      width: 19px;
+      height: 16px;
+    }
+
+    &--light {
+      background-image: url(../img/gktb-polygon-light-gray.svg);
+    }
+    &--dark {
+      background-image: url(../img/gktb-polygon-dark-gray.svg);
+    }
+    &--dotted {
+      background-image: url(../img/gktb-polygon-dotted.svg);
+    }
+  }
+
+  &-polygon-grid {
+    @include polygonGrid(29,33);
+
+    .gk-polygon {
+      position: absolute;
+    }
+  }
+
+  &-polygon-group {
+    position: absolute;
+    &--01 {
+      top: -113px;
+      left: 15%;
+      width: 252px;
+      height: 115px;
+      z-index: 1;
+    }
+    &--02 {
+      top: -146px;
+      right: 0;
+      width: 383px;
+      height: 277px;
+      z-index: 11;
+
+      @media (max-width: 649px) {
+        display: none;
+      }
+    }
+    &--03 {
+      top: 4px;
+      right: -40px;
+      width: 65px;
+      height: 50px;
+    }
+    &--04 {
+      top: 40px;
+      left: -110px;
+      width: 95px;
+      height: 120px;
+    }
+  }
+}

@@ -1,0 +1,91 @@
+pre {
+  background: $codeBackgroundColor;
+  color: $codeColor;
+  padding: 10px;
+  overflow: scroll;
+  border-radius: 4px;
+}
+code {
+  background: $codeBackgroundColor;
+  color: $codeColor;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+}
+pre code {
+  padding: 0;
+}
+
+.gk-post {
+  &__content {
+    p {
+      word-wrap: break-word;
+      margin: 0 0 1rem;
+    }
+  }
+  
+  &__categories,
+  &__tags {
+    margin-bottom: 30px;
+  }
+}
+
+.gk-post__subline {
+  font-size: 0.8rem;
+  color: #999;
+  margin: 0 0 0.3rem;
+}
+.gk-post__title {
+  font-size: 2rem;
+  line-height: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: solid 1px #ccc;
+}
+
+/* post content elements */
+.gk-post__content {
+  margin-bottom: 2rem;
+  color: $postColor;
+}
+.gk-post__content img {
+  max-width: 100%;
+}
+.gk-post__content p {
+  word-wrap: break-word;
+  margin: 0 0 1rem;
+}
+.gk-post__content h2 {
+  margin: 2rem 0 1rem;
+}
+.gk-post__content h3 {
+  margin: 0.7rem 0 0.5rem;
+}
+.gk-post__content ul {
+  list-style: disc;
+  margin: 0 0 1rem 2rem;
+}
+.gk-post__content ul li {
+  margin: 0 0 0.35rem;
+}
+
+.gk-post__content blockquote {
+  background-color: #eee;
+  padding: 1rem;
+}
+
+.gk-post__content blockquote p {
+  margin: 0;
+}
+
+/* author info */
+.gk-post__author {
+  margin-bottom: 2rem;
+}
+.gk-post__author__image img {
+  vertical-align: middle;
+  border-radius: 50%;
+}
+.gk-post__author__name {
+  font-style: italic;
+}

@@ -8,7 +8,6 @@ category: tutorials
 author: manuelkiessling
 tags: [scala, play2, json]
 ---
-{% include JB/setup %}
 
 Als Anfänger in der Arbeit mit Scala stehe ich aktuell vor der Aufgabe, eine einfache Webservice API in Play2 zu
 realisieren.

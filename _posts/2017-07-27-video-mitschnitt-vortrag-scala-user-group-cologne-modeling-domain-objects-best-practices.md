@@ -6,8 +6,6 @@ category: general
 author: manuelkiessling
 tags: [video, talk, scala, meetup]
 ---
-{% include JB/setup %}
-
 
 <p>
     Am 12. Juli 2017 waren wir erneut Gastgeber des <a href="https://www.meetup.com/de-DE/Scala-User-Group-Koln-Bonn/">monatlichen Scala Meetups in Köln</a>. Vortragender war der Kaufhof eShop Kollege <a href="https://github.com/valenterry">Valentin Willscher</a> zum Thema "Modeling Domain Objects: Best Practices".

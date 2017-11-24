@@ -1,21 +1,22 @@
 ---
 layout: page
 title: Categories
-header: Posts By Category
-group: navigation
+navigation: true
+permalink: /categories/
 ---
-{% include JB/setup %}
 
-<ul class="gk-tagbox">
-  {% assign categories_list = site.categories %}
-  {% include JB/categories_list %}
-</ul>
-
-
-{% for category in site.categories %}
-  <h2 id="{{ category[0] }}-ref">{{ category[0] | join: "/" }}</h2>
-  <ul>
-    {% assign pages_list = category[1] %}
-    {% include JB/pages_list %}
-  </ul>
-{% endfor %}
+<div id="archives">
+  {% for category in site.categories %}
+    <div class="archive-group">
+      {% capture category_name %}{{ category | first }}{% endcapture %}
+      <div id="#{{ category_name | slugize }}"></div>
+      <h3 class="category-head">{{ category_name }}</h3>
+      <a name="{{ category_name | slugize }}"></a>
+      <ul class="gk-tag__list">
+      {% for post in site.categories[category_name] %}
+        <li><a class="gk-tag__item" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+</div>

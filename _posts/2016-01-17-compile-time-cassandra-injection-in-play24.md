@@ -6,8 +6,6 @@ category: tutorials
 author: manuelkiessling
 tags: [scala, play2, cassandra]
 ---
-{% include JB/setup %}
-
 
 <h2>About</h2>
 <p>
