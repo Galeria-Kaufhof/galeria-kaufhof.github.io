@@ -1,0 +1,24 @@
+<div class="gk-footer">
+  <div class="gk-wrapper gk-cols gk-cols-3">
+    <div class="gk-col" id="menu">
+      <ul class="gk-footer__navigation">
+        {% assign pages_list = site.pages %}
+        {% assign group = 'navigation' %}
+        {% for page in site.pages %}
+          {% if page.navigation %}
+            <li class="gk-footer__navigation-item"><a href="{{ page.url | relative_url }}">{{ page.title }}</a></li>
+          {% endif %}
+        {% endfor %}
+        <li class="gk-footer__navigation-item"><a href="https://www.galeria-kaufhof.de/service/impressum/">Impressum</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="gk-wrapper">
+    <p class="gk-footer__copy">
+        &copy; Galeria Kaufhof 2014-{{ site.time | date: '%Y' }} | {{ site.author.name }} | all rights reserved          
+    </p>
+  </div>
+</div>
+<script>
+    const rellax = new Rellax(".rellax");
+</script>

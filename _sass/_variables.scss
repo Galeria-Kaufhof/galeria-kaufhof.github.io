@@ -1,0 +1,26 @@
+// BASICS
+$fontFamily: "Helvetica Neue", Helvetica, sans-serif;
+$maxWidth: 1020px;
+
+// COLORS
+$fontColor: #636363;
+$linkColor: #417505;
+$postColor: #4A4A4A;
+$codeColor: #000;
+$borderColor: #9B9B9B;
+$copyrightColor: #AAAAAA;
+$descBackgroundColor: #EEEEEE;
+$footerBackgroundColor: #4A4A4A;
+$codeBackgroundColor: #EEEEEE;
+$tagBackgroundColor: #CCC;
+
+//SIZES
+$fontSize: 18px;
+$headlineFontSize: 24px;
+$metaFontSize: 13px;
+$copyrightFontSize: 13px;
+
+//MQ
+$mq_navigation: 549px;
+$mq_maxWidth: $maxWidth - 1;
+$mq_maxWidthPolygons: $mq_maxWidth + 2 * 30px; // :before Element

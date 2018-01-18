@@ -6,8 +6,6 @@ category: tutorials
 author: manuelkiessling
 tags: [scs, self-contained services, architecture, interfaces, video, talk]
 ---
-{% include JB/setup %}
-
 
 <p>
     Am 31. Januar 2017 hatten wir die Möglichkeit, den Architekturansatz des Galeria Kaufhof Online Shops auf der OOP 2017 im Rahmen eines Vortrags ausführlich zu erläutern:

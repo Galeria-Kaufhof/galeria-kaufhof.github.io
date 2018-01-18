@@ -1,6 +1,32 @@
----
-theme :
-  name : gktb2015
----
-{% include JB/setup %}
-{% include themes/gktb2015/default.html %}
+<!DOCTYPE html>
+<html lang="de">
+  {% include head.html %}
+  <body>
+    {% include header.html %}
+    <div class="gk-content">
+      <div class="gk-wrapper gk-wrapper--overflow-hidden">
+        <div class="gk-polygon-group gk-polygon-group--03 gk-polygon-grid gk-polygon-grid--w33 gk-polygon-grid--h29 rellax"
+          data-rellax-speed="-3"></span>
+          <span class="gk-polygon gk-polygon--dark gk-polygon-grid--c-0 gk-polygon-grid--r-1"></span>
+          <span class="gk-polygon gk-polygon--dotted gk-polygon-grid--c-2 gk-polygon-grid--r-0"></span>
+        </div>
+        <div class="gk-polygon-group gk-polygon-group--04 gk-polygon-grid gk-polygon-grid--w33 gk-polygon-grid--h29"></span>
+          <span class="gk-polygon gk-polygon--dotted gk-polygon--small gk-polygon-grid--c-0 gk-polygon-grid--r-0 rellax" 
+            data-rellax-speed="3"
+          ></span>
+          <span class="gk-polygon gk-polygon--dark gk-polygon-grid--c-4 gk-polygon-grid--r-3 rellax"
+            data-rellax-speed="7"></span>
+          <span class="gk-polygon gk-polygon--dotted gk-polygon-grid--c-2 gk-polygon-grid--r-5 rellax"
+            data-rellax-speed="10"></span>          
+        </div>
+        
+        {{ content }}
+      </div>
+    </div>
+
+    {% include desc.html %}
+    {% include footer.html %}
+
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
+  </body>
+</html>

@@ -7,8 +7,6 @@ category: general
 author: manuelkiessling
 tags: [scs, self-contained services, architecture, interfaces]
 ---
-{% include JB/setup %}
-
 
 ## Über diesen Artikel
 

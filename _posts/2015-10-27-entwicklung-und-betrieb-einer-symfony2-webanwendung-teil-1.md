@@ -10,8 +10,6 @@ category: tutorials
 author: manuelkiessling
 tags: [php, symfony2, continuous delivery, migrations, tdd]
 ---
-{% include JB/setup %}
-
 
 ## Über diesen Artikel
 

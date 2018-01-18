@@ -6,7 +6,6 @@ category: tutorials
 author: janalgermissen
 tags: [scala,play,logging]
 ---
-{% include JB/setup %}
 
 The [multi-channel retailing platform we are building at GALERIA Kaufhof](http://www.startplatz.de/event/galeria-sucht-hacker/) provides
 centralised logging for all deployed applications and services. In order to leverage this common logging facility for

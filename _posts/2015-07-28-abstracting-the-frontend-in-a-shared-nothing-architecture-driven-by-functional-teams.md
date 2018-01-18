@@ -8,7 +8,6 @@ category: general
 author: ricopfaus
 tags: [javascript,coffeescript,tracking,analytics,affiliates,tagmanager,frontend]
 ---
-{% include JB/setup %}
 
 ## The challenge
 Before I explain what exactly a *"frontend middleware"* is, let me first tell you why we invented it and why it might make sense for you to use one, too. 

@@ -7,7 +7,6 @@ category: general
 author: manuelkiessling
 tags: [meetup, architecture, microservices]
 ---
-{% include JB/setup %}
 
 <img style="border: 1px solid #eee;" src="{{ site.url }}/assets/images/2015-06-22-gotonight-cologne-on-microservices-tilkov-traub-thomas/gotonight-cologne-microservices-dennistraub-stefantilkov-davethomas-intro-presentation-thumbnail.png">
 <img style="border: 1px solid #eee;" src="{{ site.url }}/assets/images/2015-06-22-gotonight-cologne-on-microservices-tilkov-traub-thomas/gotonight-cologne-microservices-dennistraub-stefantilkov-davethomas-lineup-thumbnail.png">

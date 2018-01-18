@@ -1,0 +1,31 @@
+.category-head,
+.tag-head {
+  margin-bottom: 5px;
+}
+
+.archive-group {
+  margin-bottom: 15px;
+}
+
+.gk-tag {
+  &__list {
+    padding-left: 25px;    
+  }
+  &__item {
+    position: relative;
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 12px;
+      height: 10px;
+      left: -25px;
+      top: 6px;
+      background-size: cover;
+      @extend .gk-polygon--dark;
+    }
+  }
+  &__cloud {
+    width: 90%;
+  }
+}

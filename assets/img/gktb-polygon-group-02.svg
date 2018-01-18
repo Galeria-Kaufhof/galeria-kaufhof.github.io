@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="385px" height="279px" viewBox="0 0 385 279" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47 (45396) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop" transform="translate(-928.000000, -491.000000)" fill="#FFFFFF">
+            <g id="Footer" transform="translate(0.000000, 282.000000)">
+                <g id="Group" transform="translate(1120.500000, 348.500000) scale(-1, 1) translate(-1120.500000, -348.500000) translate(929.000000, 210.000000)">
+                    <polygon id="Polygon" stroke="#9B9B9B" points="34 192 43 207.5 34 223 16 223 7 207.5 16 192"></polygon>
+                    <polygon id="Polygon" stroke="#4A4A4A" points="55 246 64 261.5 55 277 37 277 28 261.5 37 246"></polygon>
+                    <polygon id="Polygon" stroke="#9B9B9B" points="88 192 97 207.5 88 223 70 223 61 207.5 70 192"></polygon>
+                    <polygon id="Polygon" stroke="#9B9B9B" points="141 161 150 176.5 141 192 123 192 114 176.5 123 161"></polygon>
+                    <polygon id="Polygon" stroke="#CCCCCC" stroke-dasharray="2,2" points="141 129 150 144.5 141 160 123 160 114 144.5 123 129"></polygon>
+                    <polygon id="Polygon" stroke="#CCCCCC" stroke-dasharray="2,2" points="114 115 123 130.5 114 146 96 146 87 130.5 96 115"></polygon>
+                    <polygon id="Polygon" stroke="#CCCCCC" stroke-dasharray="2,2" points="70 86 79 101.5 70 117 52 117 43 101.5 52 86"></polygon>
+                    <polygon id="Polygon" stroke="#CCCCCC" stroke-dasharray="2,2" points="27 0 36 15.5 27 31 9 31 -1.77635684e-15 15.5 9 6.95471505e-15"></polygon>
+                    <polygon id="Polygon" stroke="#CCCCCC" stroke-dasharray="2" points="167 114 176 129.5 167 145 149 145 140 129.5 149 114"></polygon>
+                    <polygon id="Polygon" stroke="#9B9B9B" points="374 121 383 136.5 374 152 356 152 347 136.5 356 121"></polygon>
+                    <polygon id="Polygon" stroke="#CCCCCC" stroke-dasharray="2" points="331.75 84 337 93 331.75 102 321.25 102 316 93 321.25 84"></polygon>
+                    <polygon id="Polygon" stroke="#9B9B9B" points="61 176 70 191.5 61 207 43 207 34 191.5 43 176"></polygon>
+                    <polygon id="Polygon" stroke="#9B9B9B" points="141 192 150 207.5 141 223 123 223 114 207.5 123 192"></polygon>
+                    <polygon id="Polygon" stroke="#9B9B9B" points="168 176 177 191.5 168 207 150 207 141 191.5 150 176"></polygon>
+                    <polygon id="Polygon" stroke="#9B9B9B" points="88 161 97 176.5 88 192 70 192 61 176.5 70 161"></polygon>
+                    <polygon id="Polygon" stroke="#9B9B9B" points="114 176 123 191.5 114 207 96 207 87 191.5 96 176"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

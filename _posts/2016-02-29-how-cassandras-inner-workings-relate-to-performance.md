@@ -7,7 +7,6 @@ category: tutorials
 author: manuelkiessling
 tags: [cassandra]
 ---
-{% include JB/setup %}
 
 ## About
 

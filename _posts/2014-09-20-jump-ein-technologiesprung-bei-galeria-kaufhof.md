@@ -6,7 +6,6 @@ category: general
 author: martingrotzke
 tags: [inoio, scala, cassandra, architecture]
 ---
-{% include JB/setup %}
 
 *Dies ist ein Cross-Post vom
 [Blog der Agentur inoio](http://www.inoio.de/blog/2014/09/20/technologie-sprung-bei-galeria-kaufhof/)*

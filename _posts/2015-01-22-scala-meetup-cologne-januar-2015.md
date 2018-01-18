@@ -8,7 +8,6 @@ category: general
 author: manuelkiessling
 tags: [scala, meetup]
 ---
-{% include JB/setup %}
 
 Wir hatten die Ehre und das Vergnügen, im Januar Gastgeber des monatlichen Kölner Scala Meetups zu sein.
 Bei Faßbier und Schnittchen fanden sich rund 40 Scala-Interessierte in den Räumen von Galeria Kaufhof ein
